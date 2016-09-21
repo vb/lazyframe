@@ -3,14 +3,83 @@
 <head>
   <title>Lazyframe</title>
   <link rel="stylesheet" type="text/css" href="dist/lazyframe.css">
+  <style>
+    .container{
+      max-width: 500px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    p{
+      font-family: 'Helvetica Neue', Helvetica, arial;
+    }
+
+    .lazyframe{
+      margin-bottom: 50px;
+    }
+    .lazyframe--custom{
+      background: #bada55;
+      
+    }
+  </style>
 </head>
 <body>
-  <div 
-    class="lazyframe"
-    data-src="https://www.youtube.com/embed/6hgVihWjK2c"
-    data-vendor="youtube">
+  <div class="container">
+    <p>Youtube video with thumbnail and title from api</p>
+    <div 
+      class="lazyframe"
+      data-src="https://www.youtube.com/embed/6hgVihWjK2c"
+      data-vendor="youtube">
+    </div>
+
+    <p>Youtube video with custom thumbnail and title</p>
+    <div 
+      class="lazyframe"
+      data-src="https://www.youtube.com/embed/6hgVihWjK2c"
+      data-vendor="youtube"
+      data-title="Custom title"
+      data-thumbnail="http://placekitten.com/500/281">
+    </div>
+
+    <p>Vimeo video with thumbnail and title from api</p>
+    <div 
+      class="lazyframe"
+      data-src="https://vimeo.com/183524061"
+      data-vendor="vimeo">
+    </div>
+
+    <p>Vimeo video with custom thumbnail and title</p>
+    <div 
+      class="lazyframe"
+      data-src="https://vimeo.com/183524061"
+      data-vendor="vimeo"
+      data-title="Custom title"
+      data-thumbnail="http://placekitten.com/500/281">
+    </div>
+
+    <p>Vine video with thumbnail and title from api</p>
+    <div 
+      class="lazyframe"
+      data-src="https://vine.co/v/Ml16lZVTTxe"
+      data-vendor="vine">
+    </div>
+
+    <p>Vine video with custom thumbnail and title</p>
+    <div 
+      class="lazyframe"
+      data-src="https://vine.co/v/Ml16lZVTTxe"
+      data-vendor="vine"
+      data-title="Custom title"
+      data-thumbnail="http://placekitten.com/500/500">
+    </div>
+
+    <p>Vine video with custom thumbnail and title</p>
+    <div 
+      class="lazyframe lazyframe--custom"
+      data-src="https://babeljs.io"
+      data-title="Something completely different">
+    </div>
   </div>
-  
   <script type="text/javascript" src="dist/lazyframe.min.js"></script>
   <script>
     lazyframe('.lazyframe', {
