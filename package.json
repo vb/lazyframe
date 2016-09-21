@@ -1,0 +1,29 @@
+{
+  "name": "lazyframe",
+  "version": "1.0.0",
+  "description": "Lazyloading for embedded content",
+
+  "main": "dist/lazyframe.min.js",
+  "jsnext:main": "src/lazyframe.js",
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/viktorbergehall/lazyframe.git"
+  },
+  "keywords": [
+    "lazyload",
+    "lazyloading",
+    "iframe",
+    "pagespeed",
+    "pageload"
+  ],
+  "author": "Viktor Bergehall",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/viktorbergehall/lazyframe/issues"
+  },
+  "homepage": "https://github.com/viktorbergehall/lazyframe#readme"
+}
