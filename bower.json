@@ -1,0 +1,24 @@
+{
+  "name": "lazyframe",
+  "description": "Dependency-free library for lazyloading iframes",
+  "main": "dist/lazyframe.min.js",
+  "authors": [
+    "Viktor Bergehall"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "lazyload",
+    "lazyloading",
+    "iframe",
+    "pagespeed",
+    "pageload"
+  ],
+  "homepage": "https://github.com/viktorbergehall/lazyframe",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
