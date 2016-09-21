@@ -38,7 +38,7 @@ const Lazyframe = () => {
     endpoints: {
       youtube: (s) => `https://www.googleapis.com/youtube/v3/videos?id=${s.id}&key=${s.apikey}&fields=items(snippet(title,thumbnails))&part=snippet`,
       vimeo: (s) => `https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/${s.id}`,
-      vine: (s) => `http://crossorigin.me/https://vine.co/oembed.json?url=https%3A%2F%2Fvine.co%2Fv%2F${s.id}`
+      vine: (s) => `https://vine.co/oembed.json?url=https%3A%2F%2Fvine.co%2Fv%2F${s.id}`
     },
     response: {
       youtube: {
