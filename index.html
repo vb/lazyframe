@@ -10,12 +10,17 @@
     data-src="https://www.youtube.com/embed/6hgVihWjK2c"
     data-vendor="youtube">
   </div>
+
+  <div 
+    class="lazyframe"
+    data-src="https://www.youtube.com/embed/6hgVihWjK2c"
+    data-vendor="youtube">
+  </div>
   
   <script type="text/javascript" src="dist/lazyframe.min.js"></script>
   <script>
-    let elements = document.querySelector('.lazyframe');
-    lazyframe(elements, {
-      apikey: 'AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ'
+    lazyframe('.lazyframe', {
+      apikey: 'AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ' // Sorry, will only work on this domain
     });
   </script>
 </body>
