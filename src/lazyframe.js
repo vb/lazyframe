@@ -10,8 +10,6 @@ const Lazyframe = () => {
     src: undefined,
     thumbnail: undefined,
     title: undefined,
-    width: undefined,
-    height: undefined, 
     apikey: undefined,
     initialized: false,
     y: undefined,
@@ -67,7 +65,7 @@ const Lazyframe = () => {
     settings = Object.assign({}, defaults, args[0]);
 
     if (typeof elements === 'string') {
-      
+
       const selector = document.querySelectorAll(elements);
       for (let i = 0; i < selector.length; i++) { 
         loop(selector[i]);
