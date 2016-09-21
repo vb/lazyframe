@@ -65,8 +65,15 @@ const Lazyframe = () => {
   function init(elements, ...args) {
     
     settings = Object.assign({}, defaults, args[0]);
-        
-    if (typeof elements.length === 'undefined'){
+
+    if (typeof elements === 'string') {
+      
+      const selector = document.querySelectorAll(elements);
+      for (let i = 0; i < selector.length; i++) { 
+        loop(selector[i]);
+      }
+
+    } else if (typeof elements.length === 'undefined'){
       loop(elements);
       
     } else if (elements.length > 1) {
