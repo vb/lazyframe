@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Lazyframe</title>
+  <link rel="stylesheet" type="text/css" href="dist/lazyframe.css">
+</head>
+<body>
+  <div 
+    class="lazyframe"
+    data-src="https://www.youtube.com/embed/6hgVihWjK2c"
+    data-vendor="youtube">
+  </div>
+  
+  <script type="text/javascript" src="dist/lazyframe.min.js"></script>
+  <script>
+    let elements = document.querySelector('.lazyframe');
+    lazyframe(elements, {
+      apikey: 'AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ'
+    });
+  </script>
+</body>
+</html>
