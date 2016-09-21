@@ -1,0 +1,53 @@
+.lazyframe[data-vendor="vine"]{
+  background-color: #00bf8f;
+
+  .lazyframe__title{
+    color: #fff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    line-height: 16px;
+    white-space: nowrap;
+    z-index: 3;
+    positon: relative;
+    
+    &:after{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: -1;
+      height: 115px;
+      padding: 24px 70px 24px 24px;
+      background: linear-gradient(to top,rgba(23,23,23,0) 0,rgba(23,23,23,.7) 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#b3171717", endColorstr="#00171717", GradientType=0 );
+    }
+
+  }
+
+  &:before{
+    padding-top:100%;
+  }
+
+  &:after{
+    content: '';
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    z-index: 4;
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMzYiIGhlaWdodD0iMTM2IiB2aWV3Qm94PSIwIDAgMTM2IDEzNiI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTU2IDQ0Yy0uNyAwLTEuNC4yLTIgLjUtMS4yLjgtMiAyLTIgMy41djQwYzAgMS40LjggMi44IDIgMy41LjYuMyAxLjMuNSAyIC41czEuNC0uMiAyLS41bDM0LjYtMjBjMS4zLS43IDItMiAyLTMuNSAwLTEuNC0uNy0yLjgtMi0zLjVMNTggNDQuNWMtLjYtLjMtMS4zLS41LTItLjV6Ii8+PC9zdmc+');
+    background-color: rgba(0,0,0,.5);
+    background-size: cover;
+    background-repeat: no-repeat;
+    margin-top: -30px;
+    margin-left: -30px;
+    border-radius: 50%;  
+  }
+
+  &:hover:after{
+    background-color: rgba(0,0,0,.75);
+  }
+
+}

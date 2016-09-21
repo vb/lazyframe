@@ -1,0 +1,39 @@
+.lazyframe{
+  position: relative;
+  
+  background-color: currentColor;
+  background-repeat: no-repeat;
+  background-size: cover;
+  
+  &__title{
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    padding: 15px 17px;
+    z-index: 3;
+    
+    &:after{
+      z-index: -1;
+    }    
+  
+  }
+
+  &:hover{
+    cursor: pointer;
+  }  
+
+  &:before{
+    display: block;
+    content: "";
+    width: 100%;
+    padding-top: 100%;
+  }
+
+  iframe{
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    z-index: 5;
+    width: 100%;
+    height: 100%;
+  }
+
+}

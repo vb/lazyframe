@@ -1,0 +1,42 @@
+.lazyframe[data-vendor="vimeo"] {
+  background-color: #00adef;
+  
+  .lazyframe__title{
+    font-family: "Helvetica Neue", Helvetica, Arial;
+    color: #00adef;
+    font-size: 20px;
+    font-weight: bold;
+    text-rendering: optimizeLegibility;
+    user-select: none;
+    -webkit-font-smoothing: auto;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &:before{
+    padding-top: 56.25%;
+  }
+  
+  &:after{
+    content: '';
+    height: 40px;
+    width: 65px;
+    display: block;
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    z-index: 3;
+    background-color: rgba(0, 0, 0, 0.5);
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyMCIgaGVpZ2h0PSIyMCIgYmFzZVByb2ZpbGU9InRpbnkiIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI0ZGRiIgZD0iTTcuNzY1IDE2Ljg5bDguNDctNC44OS04LjQ3LTQuODkiLz48L3N2Zz4=");
+    background-position: center center;
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    border-radius: 5px;
+    position: relative;
+  }
+
+  &:hover:after{
+    background-color: #00adef;
+  }
+
+}
