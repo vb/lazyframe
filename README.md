@@ -1,6 +1,6 @@
 # lazyframe
 
-[![npm](https://img.shields.io/npm/v/npm.svg?maxAge=2592000)](https://www.npmjs.com/package/lazyframe)
+[![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
 Dependency-free library for lazyloading iframes. [Demo](https://viktorbergehall.github.io/lazyframe/)
 
