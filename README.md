@@ -1,6 +1,6 @@
 # lazyframe
 
-[![npm](https://img.shields.io/npm/v/npm.svg?maxAge=2592000)](https://www.npmjs.com/package/lazyframe)
+[![npm](https://img.shields.io/badge/npm-1.0.0-brightgreen.svg)](https://www.npmjs.com/package/lazyframe)
 
 Dependency-free library for lazyloading iframes. [Demo](https://viktorbergehall.github.io/lazyframe/)
 
