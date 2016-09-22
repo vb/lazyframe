@@ -42,7 +42,7 @@ Include javascript in html
 ```
 Sass import
 
-```
+```sass
 @import 'src/scss/lazyframe'; 
 ```
 Include css in html
@@ -82,18 +82,18 @@ lazyframe(elements, {
    onLoad: (lf) => console.log(lf)
 })
 ```
-### apikey
+### `apikey`
 If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey. Get it from [here](console.developers.google.com) 
 
 _If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
-### debounce
+### `debounce`
 Value (in milliseconds) for when the update function should run after the user has scrolled. [More here](https://css-tricks.com/the-difference-between-throttling-and-debouncing/)
 
-### lazyload
+### `lazyload`
 Set this to true if you want all api calls and local images to be loaded on page load (instead of when the element is in view).
 
-### onLoad
+### `onLoad`
 Callback function for when a element is initialized.
 
 ##Element-specific options
@@ -108,15 +108,15 @@ Callback function for when a element is initialized.
 	data-initinview="false">
 </div>
 ```
-### data-vendor
+### `data-vendor`
 Attribute for theming lazyframe. Currently supported values are youtube, vimeo and vine.
-### data-title
+### `data-title`
 Attribute for custom title. Leave empty to get value from api.
-### data-thumbnail
+### `data-thumbnail`
 Attribute for custom thumbnail. Leave empty to get value from api.
-### data-src
+### `data-src`
 The source of what you want to lazyload.
-### data-initinview
+### `data-initinview`
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
 
 ## License
