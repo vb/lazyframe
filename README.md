@@ -32,7 +32,7 @@ $ bower install lazyframe
 Javascript ES6 imports
 
 ```es6
-import lazyframe from 'lazyframe.js';
+import lazyframe from 'lazyframe';
 ```
 
 Include javascript in html
