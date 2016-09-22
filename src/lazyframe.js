@@ -252,7 +252,7 @@ const Lazyframe = () => {
       lazyframe.el.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
     }
     
-    if (lazyframe.settings.title) {
+    if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
       const docfrag = document.createDocumentFragment(),
             titleNode = document.createElement('span');
     
