@@ -28,6 +28,11 @@
     padding-top: 100%;
   }
 
+  &[data-ratio="16:9"]:before { padding-top: 56.25% !important; }
+  &[data-ratio="4:3"]:before { padding-top: 75% !important; }
+  &[data-ratio="1:1"]:before { padding-top: 100% !important; }
+
+
   iframe{
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;

@@ -116,6 +116,8 @@ Attribute for custom title. Leave empty to get value from api.
 Attribute for custom thumbnail. Leave empty to get value from api.
 ### `data-src`
 The source of what you want to lazyload.
+### `data-ratio`
+The ratio of the lazyframe. Possible values: 16:9, 4:3, 1:1
 ### `data-initinview`
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
 
