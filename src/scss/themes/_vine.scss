@@ -29,6 +29,10 @@
     padding-top:100%;
   }
 
+  &[data-ratio="16:9"]:before { padding-top: 56.25%; }
+  &[data-ratio="4:3"]:before { padding-top: 75%; }
+  &[data-ratio="1:1"]:before { padding-top: 100%; }
+
   &:after{
     content: '';
     width: 60px;

@@ -28,10 +28,9 @@
     padding-top: 100%;
   }
 
-  &[data-ratio="16:9"]:before { padding-top: 56.25% !important; }
-  &[data-ratio="4:3"]:before { padding-top: 75% !important; }
-  &[data-ratio="1:1"]:before { padding-top: 100% !important; }
-
+  &[data-ratio="16:9"]:before { padding-top: 56.25%; }
+  &[data-ratio="4:3"]:before { padding-top: 75%; }
+  &[data-ratio="1:1"]:before { padding-top: 100%; }
 
   iframe{
     position: absolute;
