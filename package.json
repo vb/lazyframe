@@ -11,9 +11,14 @@
   "keywords": [
     "lazyload",
     "lazyloading",
+    "embed",
     "iframe",
+    "youtube",
+    "vimeo",
+    "vine",
     "pagespeed",
-    "pageload"
+    "pageload",
+    "javascript"
   ],
   "author": "Viktor Bergehall",
   "license": "MIT",
