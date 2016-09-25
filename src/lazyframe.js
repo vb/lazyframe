@@ -1,5 +1,5 @@
 const Lazyframe = () => {
-  
+
   let settings;
   
   const elements = [];
@@ -27,7 +27,7 @@ const Lazyframe = () => {
     },
     condition: {
       youtube: (m) => (m && m[1].length == 11) ? m[1] : false,
-      vimeo: (m) => (m && m[1].length === 9) ? m[1] : false,
+      vimeo: (m) => (m && m[1].length === 9 || m[1].length === 8) ? m[1] : false,
       vine: (m) => (m && m[1].length === 11) ? m[1] : false
     },
     src: {
@@ -61,7 +61,6 @@ const Lazyframe = () => {
   };
 
   function init(elements, ...args) {
-    
     settings = Object.assign({}, defaults, args[0]);
 
     if (typeof elements === 'string') {
@@ -133,12 +132,27 @@ const Lazyframe = () => {
     return options;
 
   }
+
+  function useApi(settings) {
+
+    if (!settings.vendor) return false;
+
+    if (!settings.title || !settings.thumbnail) {
+      if (settings.vendor === 'youtube') {
+        return !!settings.apikey;
+      } else {
+        return true;
+      }
+
+    } else {
+      return false;
+    }
+
+  }
   
   function api(lazyframe) {
-    
-    const useApi = (!lazyframe.settings.title || !lazyframe.settings.thumbnail) && lazyframe.settings.apikey && lazyframe.settings.vendor;
-    
-    if (useApi) {
+        
+    if (useApi(lazyframe.settings)) {
       send(lazyframe, (err, data) => {
         if (err) return;
 
