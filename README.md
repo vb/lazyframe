@@ -105,7 +105,7 @@ Callback function for when a element is initialized.
 	data-title=""
 	data-thumbnail=""
 	data-src=""
-  data-ratio="1:1"
+  	data-ratio="1:1"
 	data-initinview="false">
 </div>
 ```
