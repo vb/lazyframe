@@ -12,6 +12,7 @@ const Lazyframe = () => {
     title: undefined,
     apikey: undefined,
     initialized: false,
+    parameters: undefined,
     y: undefined,
     debounce: 250,
     lazyload: true,
@@ -31,8 +32,8 @@ const Lazyframe = () => {
       vine: (m) => (m && m[1].length === 11) ? m[1] : false
     },
     src: {
-      youtube: (s) => `https://www.youtube.com/embed/${s.id}/?autoplay=1`,
-      vimeo: (s) => `https://player.vimeo.com/video/${s.id}/?autoplay=1`,
+      youtube: (s) => `https://www.youtube.com/embed/${s.id}/?${s.parameters}`,
+      vimeo: (s) => `https://player.vimeo.com/video/${s.id}/?${s.parameters}`,
       vine: (s) => `https://vine.co/v/${s.id}/embed/simple`
     },
     endpoints: {
@@ -121,9 +122,12 @@ const Lazyframe = () => {
     const options = Object.assign({}, 
       settings,
       attr, 
-      {y: el.offsetTop}
+      {
+        y: el.offsetTop,
+        parameters: extractParams(attr.src)
+      }
     ); 
-
+    
     if (options.vendor) {
       const match = options.src.match(constants.regex[options.vendor]);
       options.id = constants.condition[options.vendor](match);
@@ -131,6 +135,20 @@ const Lazyframe = () => {
 
     return options;
 
+  }
+  
+  function extractParams(url) {
+    let params = url.split('?');
+    
+    if (params[1]) {
+      params = params[1];
+      const hasAutoplay = params.indexOf('autoplay') !== -1;
+      return hasAutoplay ? params : params + '&autoplay=1';
+      
+    } else {
+      return 'autoplay=1';
+    }
+    
   }
 
   function useApi(settings) {
