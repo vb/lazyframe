@@ -1,10 +1,17 @@
-# lazyframe
+# Lazyframe
 
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
 Dependency-free library for lazyloading iframes. [Demo](https://viktorbergehall.github.io/lazyframe/)
 
-Statistics show that nearly half of web users expect a site to load in 2 seconds or less, and they tend to abandon a site that isn’t loaded within 3 seconds. In order to decrease the page load  developers minifies, concatenate and optimize their css, js and images. But if the site is loading external resources, for example a Youtube video, there is not much to do to decrease the time it takes to serve that resource. Lazyframe sets out to solve that problem by creating a placeholder for the resource and push the loading of the resource for when the user interacts with it. 
+## Why?
+Because embedded content takes time to load.
+
+* **Youtube** – 11 requests ≈ 580kb
+* **Google maps** – 52 requests ≈ 580kb
+* **Vimeo** – 8 requests ≈ 145kb
+
+Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time. 
 
 Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine. 
 
@@ -83,7 +90,7 @@ lazyframe(elements, {
 })
 ```
 ### `apikey`
-If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey. Get it from [here](console.developers.google.com) 
+If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](console.developers.google.com) 
 
 _If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
