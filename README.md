@@ -61,7 +61,7 @@ Include css in html
 ### Initialize
 
 ```es6
-// Passing a target
+// Passing a selector
 lazyframe('.lazyframe');
 
 // Passing a nodelist
