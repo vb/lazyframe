@@ -61,7 +61,7 @@ Include css in html
 ### Initialize
 
 ```es6
-// Passing a target
+// Passing a selector
 lazyframe('.lazyframe');
 
 // Passing a nodelist
@@ -90,7 +90,7 @@ lazyframe(elements, {
 })
 ```
 ### `apikey`
-If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](console.developers.google.com) 
+If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](https://console.developers.google.com) 
 
 _If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
