@@ -92,7 +92,8 @@ const Lazyframe = () => {
 
   function loop(el) {
 
-    if(el instanceof HTMLElement === false) return;
+    if(el instanceof HTMLElement === false ||
+       el.classList.contains('lazyframe--loaded')) return;
 
     const lazyframe = {
       el: el,
