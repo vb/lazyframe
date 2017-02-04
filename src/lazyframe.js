@@ -1,7 +1,7 @@
 const Lazyframe = () => {
 
   let settings;
-  
+
   const elements = [];
 
   const defaults = {
@@ -67,48 +67,48 @@ const Lazyframe = () => {
     if (typeof elements === 'string') {
 
       const selector = document.querySelectorAll(elements);
-      for (let i = 0; i < selector.length; i++) { 
+      for (let i = 0; i < selector.length; i++) {
         loop(selector[i]);
       }
 
     } else if (typeof elements.length === 'undefined'){
       loop(elements);
-      
+
     } else if (elements.length > 1) {
-      
-      for (let i = 0; i < elements.length; i++) { 
+
+      for (let i = 0; i < elements.length; i++) {
         loop(elements[i]);
       }
-      
+
     } else {
       loop(elements[0]);
     }
 
     if (settings.lazyload) {
-      scroll();    
+      scroll();
     }
-    
+
   }
-  
+
   function loop(el) {
-    
+
     if(el instanceof HTMLElement === false) return;
 
     const lazyframe = {
       el: el,
       settings: setup(el),
     };
-    
+
     lazyframe.el.addEventListener('click', () => lazyframe.el.appendChild(lazyframe.iframe));
-    
+
     if (settings.lazyload) {
-      build(lazyframe);    
+      build(lazyframe);
     } else {
       api(lazyframe, !!lazyframe.settings.thumbnail);
     }
-    
+
   }
-  
+
   function setup(el) {
 
     const attr = Array.prototype.slice.apply(el.attributes)
@@ -119,15 +119,15 @@ const Lazyframe = () => {
         return obj;
      }, {});
 
-    const options = Object.assign({}, 
+    const options = Object.assign({},
       settings,
-      attr, 
+      attr,
       {
         y: el.offsetTop,
         parameters: extractParams(attr.src)
       }
-    ); 
-    
+    );
+
     if (options.vendor) {
       const match = options.src.match(constants.regex[options.vendor]);
       options.id = constants.condition[options.vendor](match);
@@ -136,19 +136,19 @@ const Lazyframe = () => {
     return options;
 
   }
-  
+
   function extractParams(url) {
     let params = url.split('?');
-    
+
     if (params[1]) {
       params = params[1];
       const hasAutoplay = params.indexOf('autoplay') !== -1;
       return hasAutoplay ? params : params + '&autoplay=1';
-      
+
     } else {
       return 'autoplay=1';
     }
-    
+
   }
 
   function useApi(settings) {
@@ -167,9 +167,9 @@ const Lazyframe = () => {
     }
 
   }
-  
+
   function api(lazyframe) {
-        
+
     if (useApi(lazyframe.settings)) {
       send(lazyframe, (err, data) => {
         if (err) return;
@@ -184,20 +184,20 @@ const Lazyframe = () => {
           _l.settings.thumbnail = constants.response[_l.settings.vendor].thumbnail(response);
         }
         build(_l, true);
-        
+
       });
-      
+
     }else{
       build(lazyframe, true);
     }
 
   }
-  
+
   function send(lazyframe, cb) {
-    
+
     const endpoint = constants.endpoints[lazyframe.settings.vendor](lazyframe.settings);
     const request = new XMLHttpRequest();
-    
+
     request.open('GET', endpoint, true);
 
     request.onload = function() {
@@ -210,15 +210,15 @@ const Lazyframe = () => {
     };
 
     request.onerror = function() {
-      cb(true);    
+      cb(true);
     };
 
     request.send();
 
   }
-  
+
   function scroll() {
-    
+
     const height = window.innerHeight;
     let count = elements.length;
     const initElement = (el, i) => {
@@ -226,39 +226,39 @@ const Lazyframe = () => {
       el.el.classList.add('lazyframe--loaded');
       count--;
       api(el);
-      
+
       if (el.settings.initinview) {
         el.el.click();
       }
-      
+
       el.settings.onLoad.call(this, el);
     }
-    
+
     elements
       .filter(el => el.settings.y < height)
       .forEach(initElement);
-    
+
     const onScroll = debounce(() => {
-      
+
       up = lastY < window.scrollY;
       lastY = window.scrollY;
-      
+
       if (up) {
         elements
           .filter(el => el.settings.y < (height + lastY) && el.settings.initialized === false)
           .forEach(initElement);
       }
-      
+
       if (count === 0) {
         window.removeEventListener('scroll', onScroll, false);
       }
-      
+
     }, settings.debounce);
-      
+
     let lastY = 0;
     let t = false, up = false;
     window.addEventListener('scroll', onScroll, false);
-    
+
     function debounce(func, wait, immediate) {
       let timeout;
       return function() {
@@ -273,49 +273,49 @@ const Lazyframe = () => {
         if (callNow) func.apply(context, args);
       };
     };
-    
+
   }
-  
+
   function build(lazyframe, loadImage) {
-    
+
     lazyframe.iframe = getIframe(lazyframe.settings);
-    
+
     if (lazyframe.settings.thumbnail && loadImage) {
       lazyframe.el.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
     }
-    
+
     if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
       const docfrag = document.createDocumentFragment(),
             titleNode = document.createElement('span');
-    
+
       titleNode.className = 'lazyframe__title';
       titleNode.innerHTML = lazyframe.settings.title;
       docfrag.appendChild(titleNode);
 
       lazyframe.el.appendChild(docfrag);
     }
-    
+
     if (!settings.lazyload) {
       lazyframe.el.classList.add('lazyframe--loaded');
       lazyframe.settings.onLoad.call(this, lazyframe);
       elements.push(lazyframe);
     }
-    
+
     if (!lazyframe.settings.initialized) {
       elements.push(lazyframe);
     }
-  
+
   }
-  
-  function getIframe(settings) { 
-    
+
+  function getIframe(settings) {
+
     const docfrag = document.createDocumentFragment(),
           iframeNode = document.createElement('iframe');
-    
+
     if (settings.vendor) {
       settings.src = constants.src[settings.vendor](settings);
     }
-    
+
     iframeNode.setAttribute('src', settings.src);
     iframeNode.setAttribute('frameborder', 0);
     iframeNode.setAttribute('allowfullscreen', '');
@@ -325,10 +325,10 @@ const Lazyframe = () => {
       scriptNode.setAttribute('src', 'https://platform.vine.co/static/scripts/embed.js');
       docfrag.appendChild(scriptNode);
     }
-    
+
     docfrag.appendChild(iframeNode);
     return docfrag;
-  
+
   }
 
   return init;
