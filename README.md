@@ -11,9 +11,9 @@ Because embedded content takes time to load.
 * **Google maps** – 52 requests ≈ 580kb
 * **Vimeo** – 8 requests ≈ 145kb
 
-Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time. 
+Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
 
-Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine. 
+Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine.
 
 1. [Install](#install)
 2. [Import](#import)
@@ -50,7 +50,7 @@ Include javascript in html
 Sass import
 
 ```sass
-@import 'src/scss/lazyframe'; 
+@import 'src/scss/lazyframe';
 ```
 Include css in html
 
@@ -75,22 +75,23 @@ lazyframe(elements);
 
 ## Options
 
-You can pass general options to lazyframe on initialization. Element-specific options (mosts options) is set on data attributes on the element itself. 
+You can pass general options to lazyframe on initialization. Element-specific options (mosts options) is set on data attributes on the element itself.
 
-General options and corresponding defaults 
+General options and corresponding defaults
 
 ```es6
 lazyframe(elements, {
    apikey: undefined,
    debounce: 250,
    lazyload: true,
-   
+
    // Callbacks
-   onLoad: (lf) => console.log(lf)
+   onLoad: (lazyframe) => console.log(lazyframe),
+   onAppend: (iframe) => console.log(iframe)
 })
 ```
 ### `apikey`
-If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](https://console.developers.google.com) 
+If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](https://console.developers.google.com)
 
 _If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
@@ -103,10 +104,13 @@ Set this to true if you want all api calls and local images to be loaded on page
 ### `onLoad`
 Callback function for when a element is initialized.
 
+### `onAppend`
+Callback function for when the iframe is appended to DOM.
+
 ##Element-specific options
 
 ```html
-<div 
+<div
 	class="lazyframe"
 	data-vendor=""
 	data-title=""
