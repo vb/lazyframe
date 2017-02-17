@@ -17,7 +17,8 @@ const Lazyframe = () => {
     debounce: 250,
     lazyload: true,
     initinview: false,
-    onLoad: (l) => {}
+    onLoad: (l) => {},
+    onAppend: (l) => {}
   };
 
   const constants = {
@@ -100,7 +101,12 @@ const Lazyframe = () => {
       settings: setup(el),
     };
 
-    lazyframe.el.addEventListener('click', () => lazyframe.el.appendChild(lazyframe.iframe));
+    lazyframe.el.addEventListener('click', () => {
+      lazyframe.el.appendChild(lazyframe.iframe);
+
+      const iframe = el.querySelectorAll('iframe');
+      lazyframe.settings.onAppend.call(this, iframe[0]);
+    });
 
     if (settings.lazyload) {
       build(lazyframe);
@@ -317,6 +323,7 @@ const Lazyframe = () => {
       settings.src = constants.src[settings.vendor](settings);
     }
 
+    iframeNode.setAttribute('id', `lazyframe-${settings.id}`);
     iframeNode.setAttribute('src', settings.src);
     iframeNode.setAttribute('frameborder', 0);
     iframeNode.setAttribute('allowfullscreen', '');
