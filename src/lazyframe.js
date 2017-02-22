@@ -18,7 +18,8 @@ const Lazyframe = () => {
     lazyload: true,
     initinview: false,
     onLoad: (l) => {},
-    onAppend: (l) => {}
+    onAppend: (l) => {},
+    onThumbnailLoad: (img) => {}
   };
 
   const constants = {
@@ -188,7 +189,9 @@ const Lazyframe = () => {
           _l.settings.title = constants.response[_l.settings.vendor].title(response);
         }
         if (!_l.settings.thumbnail) {
-          _l.settings.thumbnail = constants.response[_l.settings.vendor].thumbnail(response);
+          const url = constants.response[_l.settings.vendor].thumbnail(response);
+          _l.settings.thumbnail = url;
+          lazyframe.settings.onThumbnailLoad.call(this, url);
         }
         build(_l, true);
 
