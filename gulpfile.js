@@ -34,5 +34,5 @@ gulp.task('js', () => {
 });
 
 gulp.task('build', ['scss', 'js']);
-gulp.task('clean', () => del('dist/**/*.js'))
-gulp.task('default', ['build', 'server', 'watch'])
+gulp.task('clean', () => del('dist/**/*.js'));
+gulp.task('default', ['build']);
