@@ -87,7 +87,8 @@ lazyframe(elements, {
 
    // Callbacks
    onLoad: (lazyframe) => console.log(lazyframe),
-   onAppend: (iframe) => console.log(iframe)
+   onAppend: (iframe) => console.log(iframe),
+   onThumbnailLoad: (img) => console.log(img)
 })
 ```
 ### `apikey`
@@ -106,6 +107,9 @@ Callback function for when a element is initialized.
 
 ### `onAppend`
 Callback function for when the iframe is appended to DOM.
+
+### `onThumbnailLoad`
+Callback function with the thumbnail url
 
 ##Element-specific options
 
