@@ -47,9 +47,9 @@ const Lazyframe = () => {
       youtube: {
         title: (r) => r.items['0'].snippet.title,
         thumbnail: (r) => {
-          let thumb = r.items["0"].snippet.thumbnails;
-          let url = thumb.maxres ? thumb.maxres.url : thumb.standard.url;
-          return url;
+          let thumbs = r.items["0"].snippet.thumbnails;
+          let thumb = thumbs.maxres || thumbs.standard || thumbs.high || thumbs.medium || thumbs.default;
+          return thumb.url;
         }
       },
       vimeo: {
