@@ -250,8 +250,8 @@ const Lazyframe = () => {
 
     const onScroll = debounce(() => {
 
-      up = lastY < window.scrollY;
-      lastY = window.scrollY;
+      up = lastY < window.pageYOffset;
+      lastY = window.pageYOffset;
 
       if (up) {
         elements
