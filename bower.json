@@ -13,7 +13,7 @@
     "pagespeed",
     "pageload"
   ],
-  "homepage": "https://github.com/viktorbergehall/lazyframe",
+  "homepage": "https://github.com/vb/lazyframe",
   "ignore": [
     "**/.*",
     "node_modules",
