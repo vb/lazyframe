@@ -6,7 +6,7 @@
   "jsnext:main": "src/lazyframe.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/viktorbergehall/lazyframe.git"
+    "url": "git+https://github.com/vb/lazyframe.git"
   },
   "keywords": [
     "lazyload",
@@ -23,9 +23,9 @@
   "author": "Viktor Bergehall",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/viktorbergehall/lazyframe/issues"
+    "url": "https://github.com/vb/lazyframe/issues"
   },
-  "homepage": "https://viktorbergehall.github.io/lazyframe",
+  "homepage": "https://vb.github.io/lazyframe",
   "devDependencies": {
     "babel-plugin-transform-object-assign": "^6.8.0",
     "babel-preset-es2015": "^6.14.0",
