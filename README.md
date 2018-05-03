@@ -2,7 +2,7 @@
 
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
-Dependency-free library for lazyloading iframes. [Demo](https://viktorbergehall.github.io/lazyframe/)
+Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/lazyframe/)
 
 ## Why?
 Because embedded content takes time to load.
