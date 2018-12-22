@@ -1,10 +1,11 @@
-const gulp = require('gulp'),
-  rollup = require('rollup'),
-  sass = require('gulp-sass'),
-  babel = require('rollup-plugin-babel'),
-  uglify = require('rollup-plugin-uglify'),
-  del = require('del'),
-  fs = require('fs');
+'use strict';
+
+const fs = require('fs');
+const gulp = require('gulp');
+const sass = require('gulp-sass');
+const rollup = require('rollup');
+const babel = require('rollup-plugin-babel');
+const uglify = require('rollup-plugin-uglify');
 
 gulp.task('scss', () => {
   return gulp.src('src/scss/lazyframe.scss')
@@ -27,12 +28,11 @@ gulp.task('js', () => {
       const files = bundle.generate({
         format: 'umd',
         exports: 'default',
-        moduleName: 'lazyframe',
+        moduleName: 'lazyframe'
       });
-      fs.appendFileSync('dist/lazyframe.min.js', files.code);
+
+      fs.writeFileSync('dist/lazyframe.min.js', files.code);
     });
 });
 
-gulp.task('build', ['scss', 'js']);
-gulp.task('clean', () => del('dist/**/*.js'));
-gulp.task('default', ['build']);
+gulp.task('default', gulp.parallel('scss', 'js'));
