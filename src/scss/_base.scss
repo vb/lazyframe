@@ -1,40 +1,47 @@
-.lazyframe{
+.lazyframe {
   position: relative;
-  
+
   background-color: currentColor;
   background-repeat: no-repeat;
   background-size: cover;
-  
-  &__title{
+
+  &__title {
     position: absolute;
-    top: 0; left: 0; right: 0;
+    top: 0;
+    right: 0;
+    left: 0;
     padding: 15px 17px;
     z-index: 3;
-    
-    &:after{
+
+    &::after {
       z-index: -1;
-    }    
-  
+    }
+
   }
 
-  &:hover{
+  &:hover {
     cursor: pointer;
-  }  
+  }
 
-  &:before{
+  &::before {
     display: block;
     content: "";
     width: 100%;
     padding-top: 100%;
   }
 
-  &[data-ratio="16:9"]:before { padding-top: 56.25%; }
-  &[data-ratio="4:3"]:before { padding-top: 75%; }
-  &[data-ratio="1:1"]:before { padding-top: 100%; }
+  &[data-ratio="16:9"]::before { padding-top: 56.25%; }
 
-  iframe{
+  &[data-ratio="4:3"]::before { padding-top: 75%; }
+
+  &[data-ratio="1:1"]::before { padding-top: 100%; }
+
+  iframe {
     position: absolute;
-    top: 0; left: 0; right: 0; bottom: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 5;
     width: 100%;
     height: 100%;
