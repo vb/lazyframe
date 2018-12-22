@@ -5,6 +5,7 @@
 Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/lazyframe/)
 
 ## Why?
+
 Because embedded content takes time to load.
 
 * **Youtube** – 11 requests ≈ 580kb
@@ -36,31 +37,33 @@ $ bower install lazyframe
 
 ### Import
 
-Javascript ES6 imports
+JavaScript ES6 imports
 
-```es6
+```js
 import lazyframe from 'lazyframe';
 ```
 
-Include javascript in html
+Include JavaScript in html
 
 ```html
 <script src="dist/lazyframe.min.js"></script>
 ```
+
 Sass import
 
 ```sass
 @import 'src/scss/lazyframe';
 ```
+
 Include css in html
 
 ```html
-<link rel="stylesheet" type="text/css" href="dist/lazyframe.css">
+<link rel="stylesheet" href="dist/lazyframe.css">
 ```
 
 ### Initialize
 
-```es6
+```js
 // Passing a selector
 lazyframe('.lazyframe');
 
@@ -75,11 +78,11 @@ lazyframe(elements);
 
 ## Options
 
-You can pass general options to lazyframe on initialization. Element-specific options (mosts options) is set on data attributes on the element itself.
+You can pass general options to lazyframe on initialization. Element-specific options (most options) are set on data attributes on the element itself.
 
 General options and corresponding defaults
 
-```es6
+```js
 lazyframe(elements, {
    apikey: undefined,
    debounce: 250,
@@ -91,50 +94,69 @@ lazyframe(elements, {
    onThumbnailLoad: (img) => console.log(img)
 })
 ```
+
 ### `apikey`
-If you want to load a thumbnail and title for a Youtube video you'll have to have an apikey with the Youtube data api library enabled. Get it from [here](https://console.developers.google.com)
+
+If you want to load a thumbnail and title for a YouTube video you'll have to have an API key with the YouTube data API library enabled. Get it from [here](https://console.developers.google.com/)
 
 _If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
 ### `debounce`
+
 Value (in milliseconds) for when the update function should run after the user has scrolled. [More here](https://css-tricks.com/the-difference-between-throttling-and-debouncing/)
 
 ### `lazyload`
-Set this to true if you want all api calls and local images to be loaded on page load (instead of when the element is in view).
+
+Set this to true if you want all API calls and local images to be loaded on page load (instead of when the element is in view).
 
 ### `onLoad`
+
 Callback function for when a element is initialized.
 
 ### `onAppend`
+
 Callback function for when the iframe is appended to DOM.
 
 ### `onThumbnailLoad`
-Callback function with the thumbnail url
 
-##Element-specific options
+Callback function with the thumbnail URL
+
+## Element-specific options
 
 ```html
 <div
-	class="lazyframe"
-	data-vendor=""
-	data-title=""
-	data-thumbnail=""
-	data-src=""
-  	data-ratio="1:1"
-	data-initinview="false">
+    class="lazyframe"
+    data-vendor=""
+    data-title=""
+    data-thumbnail=""
+    data-src=""
+    data-ratio="1:1"
+    data-initinview="false">
 </div>
 ```
+
 ### `data-vendor`
-Attribute for theming lazyframe. Currently supported values are youtube, vimeo and vine.
+
+Attribute for theming lazyframe. Currently supported values are `youtube`, `vimeo` and `vine`.
+
 ### `data-title`
-Attribute for custom title. Leave empty to get value from api.
+
+Attribute for custom title. Leave empty to get value from API.
+
 ### `data-thumbnail`
-Attribute for custom thumbnail. Leave empty to get value from api.
+
+Attribute for custom thumbnail. Leave empty to get value from API.
+
 ### `data-src`
+
 The source of what you want to lazyload.
+
 ### `data-ratio`
+
 The ratio of the lazyframe. Possible values: 16:9, 4:3, 1:1
+
 ### `data-initinview`
+
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
 
 ## License
