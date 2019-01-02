@@ -1,9 +1,10 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-  <title>Lazyframe</title>
+  <meta charset="utf-8">
+  <title>Lazyframe Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" type="text/css" href="dist/lazyframe.css">
+  <link rel="stylesheet" href="dist/lazyframe.css">
   <style>
     .container{
       max-width: 500px;
@@ -11,45 +12,50 @@
       width: 100%;
     }
 
-    p{
-      font-family: 'Helvetica Neue', Helvetica, arial;
+    p {
+      font-family: "Helvetica Neue", Helvetica, Arial;
     }
 
-    .lazyframe{
+    .lazyframe {
       margin-bottom: 200px;
     }
-    .lazyframe--custom{
+    .lazyframe--custom {
       background: #bada55;
+      display: -webkit-box;
+      display: -ms-flexbox;
       display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
       align-items: center;
       text-align: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
       justify-content: center;
-      
     }
-    .lazyframe--custom .lazyframe__title{
+    .lazyframe--custom .lazyframe__title {
       position: relative;
       width: 100%;
       display: block;
       font-size: 32px;
-      font-family: arial;
-      color: white;
+      font-family: Arial;
+      color: #fff;
     }
-    .lazyframe--custom:before{
+    .lazyframe--custom::before{
       width: auto;
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <p>Youtube video with thumbnail and title from api</p>
-    <div 
+    <p>Youtube video with thumbnail and title from API</p>
+    <div
       class="lazyframe"
       data-src="https://www.youtube.com/embed/6hgVihWjK2c"
       data-vendor="youtube">
     </div>
 
     <p>Youtube video with custom thumbnail and title</p>
-    <div 
+    <div
       class="lazyframe"
       data-src="https://www.youtube.com/embed/6hgVihWjK2c"
       data-vendor="youtube"
@@ -57,15 +63,15 @@
       data-thumbnail="https://placekitten.com/500/281">
     </div>
 
-    <p>Vimeo video with thumbnail and title from api</p>
-    <div 
+    <p>Vimeo video with thumbnail and title from API</p>
+    <div
       class="lazyframe"
       data-src="https://vimeo.com/45915667"
       data-vendor="vimeo">
     </div>
 
     <p>Vimeo video with custom thumbnail and title</p>
-    <div 
+    <div
       class="lazyframe"
       data-src="https://vimeo.com/183524061"
       data-vendor="vimeo"
@@ -74,21 +80,21 @@
     </div>
 
     <p>Iframe with custom theme and title</p>
-    <div 
+    <div
       class="lazyframe lazyframe--custom"
       data-src="https://www.surveymonkey.com/r/?sm=%2bd%2bdWobuoz7irMV%2fpzKPcJmrKosuGWSraJtIrFQ4wBQ%3d"
       data-title="Something completely different">
     </div>
-    
+
     <p>Google maps iframe with custom thumbnail and title that gets executed when in view</p>
-    <div 
+    <div
       class="lazyframe lazyframe--custom"
       data-src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ8fA1bTmyXEYRYm-tjaLruCI&key=AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ"
       data-title="Something completely different"
       data-initinview="true">
     </div>
   </div>
-  <script type="text/javascript" src="dist/lazyframe.min.js"></script>
+  <script src="dist/lazyframe.min.js"></script>
   <script>
     lazyframe('.lazyframe', {
       apikey: 'AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ' // Sorry, will only work on this domain
