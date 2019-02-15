@@ -107,7 +107,7 @@ Value (in milliseconds) for when the update function should run after the user h
 
 ### `lazyload`
 
-Set this to true if you want all API calls and local images to be loaded on page load (instead of when the element is in view).
+Set this to `false` if you want all API calls and local images to be loaded on page load (instead of when the element is in view).
 
 ### `onLoad`
 
