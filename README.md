@@ -137,7 +137,7 @@ Callback function with the thumbnail URL
 
 ### `data-vendor`
 
-Attribute for theming lazyframe. Currently supported values are `youtube`, `vimeo` and `vine`.
+Attribute for theming lazyframe. Currently supported values are `youtube`, `youtube_nocookie`, `vimeo` and `vine`.
 
 ### `data-title`
 
