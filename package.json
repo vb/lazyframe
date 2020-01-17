@@ -34,5 +34,8 @@
     "rollup": "^0.36.0",
     "rollup-plugin-babel": "^2.6.1",
     "rollup-plugin-uglify": "^1.0.1"
+  },
+  "scripts": {
+    "build": "gulp"
   }
 }
