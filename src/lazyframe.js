@@ -17,9 +17,9 @@ const Lazyframe = () => {
     debounce: 250,
     lazyload: true,
     initinview: false,
-    onLoad: (l) => {},
-    onAppend: (l) => {},
-    onThumbnailLoad: (img) => {}
+    onLoad: (l) => { },
+    onAppend: (l) => { },
+    onThumbnailLoad: (img) => { }
   };
 
   const constants = {
@@ -51,7 +51,7 @@ const Lazyframe = () => {
       youtube: {
         title: (r) => r.items['0'].snippet.title,
         thumbnail: (r) => {
-          let thumbs = r.items["0"].snippet.thumbnails;
+          let thumbs = r.items['0'].snippet.thumbnails;
           let thumb = thumbs.maxres || thumbs.standard || thumbs.high || thumbs.medium || thumbs.default;
           return thumb.url;
         }
@@ -59,7 +59,7 @@ const Lazyframe = () => {
       youtube_nocookie: {
         title: (r) => r.items['0'].snippet.title,
         thumbnail: (r) => {
-          let thumbs = r.items["0"].snippet.thumbnails;
+          let thumbs = r.items['0'].snippet.thumbnails;
           let thumb = thumbs.maxres || thumbs.standard || thumbs.high || thumbs.medium || thumbs.default;
           return thumb.url;
         }
@@ -85,7 +85,7 @@ const Lazyframe = () => {
         loop(selector[i]);
       }
 
-    } else if (typeof elements.length === 'undefined'){
+    } else if (typeof elements.length === 'undefined') {
       loop(elements);
 
     } else if (elements.length > 1) {
@@ -106,8 +106,8 @@ const Lazyframe = () => {
 
   function loop(el) {
 
-    if(el instanceof HTMLElement === false ||
-       el.classList.contains('lazyframe--loaded')) return;
+    if (el instanceof HTMLElement === false ||
+      el.classList.contains('lazyframe--loaded')) return;
 
     const lazyframe = {
       el: el,
@@ -132,12 +132,12 @@ const Lazyframe = () => {
   function setup(el) {
 
     const attr = Array.prototype.slice.apply(el.attributes)
-     .filter(att => att.value !== '')
-     .reduce((obj, curr) => {
+      .filter(att => att.value !== '')
+      .reduce((obj, curr) => {
         let name = curr.name.indexOf('data-') === 0 ? curr.name.split('data-')[1] : curr.name;
         obj[name] = curr.value;
         return obj;
-     }, {});
+      }, {});
 
     const options = Object.assign({},
       settings,
@@ -163,10 +163,10 @@ const Lazyframe = () => {
     if (params[1]) {
       params = params[1];
       const hasAutoplay = params.indexOf('autoplay') !== -1;
-      return hasAutoplay ? params : params + '&autoplay=1';
+      return hasAutoplay ? params : params + '&autoplay=1&rel=0';
 
     } else {
-      return 'autoplay=1';
+      return 'autoplay=1&rel=0';
     }
 
   }
@@ -209,7 +209,7 @@ const Lazyframe = () => {
 
       });
 
-    }else{
+    } else {
       build(lazyframe, true);
     }
 
@@ -222,7 +222,7 @@ const Lazyframe = () => {
 
     request.open('GET', endpoint, true);
 
-    request.onload = function() {
+    request.onload = function () {
       if (request.status >= 200 && request.status < 400) {
         const data = JSON.parse(request.responseText);
         cb(null, [data, lazyframe]);
@@ -231,7 +231,7 @@ const Lazyframe = () => {
       }
     };
 
-    request.onerror = function() {
+    request.onerror = function () {
       cb(true);
     };
 
@@ -254,7 +254,7 @@ const Lazyframe = () => {
       }
 
       el.settings.onLoad.call(this, el);
-    }
+    };
 
     elements
       .filter(el => el.settings.y < height)
@@ -283,9 +283,9 @@ const Lazyframe = () => {
 
     function debounce(func, wait, immediate) {
       let timeout;
-      return function() {
+      return function () {
         let context = this, args = arguments;
-        let later = function() {
+        let later = function () {
           timeout = null;
           if (!immediate) func.apply(context, args);
         };
@@ -294,7 +294,7 @@ const Lazyframe = () => {
         timeout = setTimeout(later, wait);
         if (callNow) func.apply(context, args);
       };
-    };
+    }
 
   }
 
@@ -308,7 +308,7 @@ const Lazyframe = () => {
 
     if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
       const docfrag = document.createDocumentFragment(),
-            titleNode = document.createElement('span');
+        titleNode = document.createElement('span');
 
       titleNode.className = 'lazyframe__title';
       titleNode.innerHTML = lazyframe.settings.title;
@@ -332,7 +332,7 @@ const Lazyframe = () => {
   function getIframe(settings) {
 
     const docfrag = document.createDocumentFragment(),
-          iframeNode = document.createElement('iframe');
+      iframeNode = document.createElement('iframe');
 
     if (settings.vendor) {
       settings.src = constants.src[settings.vendor](settings);
@@ -356,7 +356,7 @@ const Lazyframe = () => {
 
   return init;
 
-}
+};
 
 const lf = Lazyframe();
 
