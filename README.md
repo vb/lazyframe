@@ -164,6 +164,7 @@ The ratio of the lazyframe. Possible values: 16:9, 4:3, 1:1
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
 
 ## Changelog
+* v1.1.901 betterify example page
 * v1.1.9 remove gulp and rollup and use webpack instead
     * use Babel 7
     * add changelog to README
