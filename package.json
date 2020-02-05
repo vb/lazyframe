@@ -1,6 +1,6 @@
 {
   "name": "lazyframe",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Dependency-free library for lazyloading iframes",
   "main": "dist/lazyframe.min.js",
   "jsnext:main": "src/lazyframe.js",
@@ -28,6 +28,7 @@
   "homepage": "https://vb.github.io/lazyframe",
   "devDependencies": {
     "babel-plugin-transform-object-assign": "^6.22.0",
+    "babel-preset-env": "^1.7.0",
     "babel-preset-es2015": "^6.24.1",
     "gulp": "^4.0.0",
     "gulp-sass": "^4.0.2",
