@@ -6,7 +6,9 @@ Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/laz
 
 ## Why?
 
-Because embedded content takes time to load.
+Because the JavaScript loaded from the external providers is big and takes much time to load. This slows down your site, even if your visitors don't want to see your beautiful videos.
+
+For example here are the number of requests and filesizes of some well-known services.
 
 * **Youtube** – 11 requests ≈ 580kb
 * **Google maps** – 52 requests ≈ 580kb
@@ -20,6 +22,8 @@ Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine.
 2. [Import](#import)
 3. [Initialize](#Initialize)
 4. [Options](#options)
+5. [Changelog](#changelog)
+5. [Compile from Source](#compile-from-source)
 
 ### Install
 
@@ -158,6 +162,20 @@ The ratio of the lazyframe. Possible values: 16:9, 4:3, 1:1
 ### `data-initinview`
 
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
+
+## Changelog
+* v1.1.9 remove gulp and rollup and use webpack instead
+    * use Babel 7
+    * add changelog to README
+    * add Compile from source instructions
+* v1.1.8 add rel=0 parameter to YouTube videos
+
+## Compile from source
+* clone the github repo
+* cd into the cloned directory
+* make your changes in the script or the scss file
+* run `npx webpack`
+* copy scripts from dist folder
 
 ## License
 

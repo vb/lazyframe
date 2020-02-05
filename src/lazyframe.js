@@ -1,3 +1,5 @@
+import './scss/lazyframe.scss';
+
 const Lazyframe = () => {
 
   let settings;
@@ -359,5 +361,5 @@ const Lazyframe = () => {
 };
 
 const lf = Lazyframe();
-
+window.lazyframe = Lazyframe();
 export default lf;
