@@ -2,7 +2,9 @@
 
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
-Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/lazyframe/)
+Dependency-free library for lazyloading iframes. 
+
+Watch some examples here: [https://jmartsch.github.io/lazyframe/](https://jmartsch.github.io/lazyframe/)
 
 ## Why?
 
@@ -10,13 +12,13 @@ Because the JavaScript loaded from the external providers is big and takes much 
 
 For example here are the number of requests and filesizes of some well-known services.
 
-* **Youtube** – 11 requests ≈ 580kb
+* **YouTube** – 11 requests ≈ 580kb
 * **Google maps** – 52 requests ≈ 580kb
 * **Vimeo** – 8 requests ≈ 145kb
 
 Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
 
-Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine.
+Lazyframe comes with brand-like themes for YouTube, Vimeo and Vine.
 
 1. [Install](#install)
 2. [Import](#import)
