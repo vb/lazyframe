@@ -11,13 +11,10 @@ module.exports = {
         rules: [
             {
                 test: /\.s[ac]ss$/i,
+                exclude: /node_modules/,
                 use: [
                     MiniCssExtractPlugin.loader,
-                    // Creates `style` nodes from JS strings
-                    // 'style-loader',
-                    // Translates CSS into CommonJS
                     'css-loader',
-                    // Compiles Sass to CSS
                     'sass-loader',
                 ],
             },
@@ -26,8 +23,6 @@ module.exports = {
     },
     plugins: [
         new MiniCssExtractPlugin({
-            // Options similar to the same options in webpackOptions.output
-            // both options are optional
             filename: 'lazyframe.css',
             // chunkFilename: '[id].css'
         }),
