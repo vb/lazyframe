@@ -4,7 +4,7 @@
 
 Dependency-free library for lazyloading iframes. 
 
-Watch some examples here: [https://jmartsch.github.io/lazyframe/](https://jmartsch.github.io/lazyframe/)
+Watch some examples here: [https://vb.github.io/lazyframe/](https://vb.github.io/lazyframe/)
 
 ## Why?
 
