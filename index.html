@@ -6,8 +6,17 @@
   <title>Lazyframe Demo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="dist/lazyframe.css">
-  <link rel="stylesheet" href="https://cdn.tailwindcdn.com/1.1.4/tailwind.min.css">
+  <link rel="stylesheet" href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css">
   <style>
+    .container,
+    .container-lg {
+      width: 100%;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
     .lazyframe--custom {
       background: #bada55;
       display: -webkit-box;
@@ -38,22 +47,20 @@
 </head>
 
 <body class="overflow-x-hidden font-sans antialiased text-gray-900 bg-white">
-
   <main>
-
     <!-- start hero section -->
-    <section class="relative px-4 pt-10 pb-10 text-center bg-blue-500 md:text-center text-white">
+    <section class="bg-blue-500 md:text-center pb-10 pt-10 px-4 relative text-center text-white">
       <div>
         <h1 class="text-5xl font-bold leading-tight">Lazyframe</h1>
         <p class="mt-4">Dependency-free library for lazyloading iframes</p>
-        <p class="mt-4"><a href="https://github.com/jmartsch/lazyframe">https://github.com/jmartsch/lazyframe</a></p>
+        <p class="mt-4"><a href="https://vb.github.io/lazyframe/">https://vb.github.io/lazyframe/</a></p>
       </div>
     </section>
     <!-- end hero section -->
-
     <!-- start how it works -->
-    <section class="px-4 py-16 text-center bg-gray-100">
-      <h2 class="text-2xl font-bold leading-tight lg:text-3xl">What does it do? It turns blue.</h2>
+    <section class="bg-gray-100 px-4 py-16 text-center">
+      <div class="container">
+      <h2 class="text-2xl font-bold leading-tight lg:text-3xl">How it works</h2>
       <p class="mt-5 mt-5 text-2xl text-center">Lazyframe creates a responsive placeholder for embedded content and only
         requests it when the user
         interacts with
@@ -66,7 +73,6 @@
       </p>
       <p>For example here are the number of requests and filesizes of some well-known services.</p>
       <ul class="list-unstyled mt-10">
-
         <li>
           YouTube – 11 requests ≈ 580kb
         </li>
@@ -77,13 +83,12 @@
           Vimeo – 8 requests ≈ 145kb
         </li>
       </ul>
-
+      </div>
     </section>
     <!-- end how it works -->
-
-    <section class="bg-blue-300 p-10 text-center ">
+    <section class="bg-blue-300 p-10 text-center">
+      <div class="container">
       <h2 class="text-2xl font-bold leading-tight lg:text-3xl">Examples</h2>
-
       <div class="mt-8 md:flex">
         <div class="w-full  bg-white  shadow-lg sm:w-1/2 sm:mx-2 lg:mx-6">
           <div class="lazyframe" data-src="https://www.youtube.com/watch?v=izDzsFe1o4I" data-vendor="youtube">
@@ -92,23 +97,15 @@
             <h4 class="text-lg font-bold tracking-wide">Embed YouTube video with thumbnail and title from
               API
             </h4>
-            <p>This demo only works at https://vb.github.io/lazyframe/, so we have to wait, until this is merged into
-              the
-              master repo</p>
           </div>
         </div>
-
         <div class="w-full bg-white shadow-lg sm:w-1/2 sm:mx-2 lg:mx-6 mt-5 md:mt-0">
           <div>
             <div class="lazyframe" data-src="https://www.youtube.com/embed/6hgVihWjK2c" data-vendor="youtube"
               data-title="Custom title" data-thumbnail="https://placekitten.com/500/281">
             </div>
-
-            <h4 class="px-4 py-8 text-lg font-bold tracking-wide">Embed YouTube video with custom preview image
-              and
-              custom title
-            </h4>
-
+            <h4 class="px-4 py-8 text-lg font-bold tracking-wide">Embed YouTube video with custom preview image and
+              custom title</h4>
           </div>
         </div>
       </div>
@@ -122,7 +119,6 @@
             API
           </h4>
         </div>
-
         <div class="w-full bg-white  shadow-lg sm:w-1/2 sm:mx-2 lg:mx-6 mt-5 md:mt-0">
           <div>
             <div class="lazyframe" data-src="https://www.youtube.com/embed/6hgVihWjK2c" data-vendor="youtube"
@@ -134,7 +130,6 @@
           </div>
         </div>
       </div>
-
       <div class="mt-8 md:flex">
         <div class="w-full  bg-white  shadow-lg sm:w-1/2 sm:mx-2 lg:mx-6">
           <div>
@@ -146,7 +141,6 @@
           <h4 class="px-4 py-8 text-lg font-bold tracking-wide">Custom Iframe
           </h4>
         </div>
-
         <div class="w-full bg-white  shadow-lg sm:w-1/2 sm:mx-2 lg:mx-6 mt-5 md:mt-0">
           <div>
             <div class="lazyframe lazyframe--custom"
@@ -154,52 +148,26 @@
               data-title="Something completely different" data-initinview="true">
             </div>
             <div class="px-4 py-8">
-              <h4 class="text-lg font-bold tracking-wide uppercase">Google maps iframe with custom thumbnail and
+              <h4 class="text-lg font-bold tracking-wide">Google maps iframe with custom thumbnail and
                 title that gets executed when in view
               </h4>
-              <p class="mt-2 text-base text-gray-700">This demo only works at https://vb.github.io/lazyframe/, so we
-                have
-                to wait, until this is merged into the
-                master repo
-              </p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-
-    <!-- start features -->
-    <section class="flex flex-col px-4 py-12 text-center bg-blue-500 lg:px-16 md:px-8 xl:px-24 xxl:px-40">
-      <div>
-        <h2 class="text-2xl font-bold leading-tight text-white lg:text-3xl">Lazyframe is small, beautiful and easy to
-          apply.
-          My website loads now much faster. Thank you very much for creating this impressive script!”
-        </h2>
-        <p class="mt-4 text-xl font-bold text-white">Random guy</p>
-        <p class="text-gray-300">on the internet</p>
       </div>
-
-
     </section>
-    <!-- end features -->
-
     <!-- start cta -->
     <section class="px-4 py-12 text-center bg-white lg:px-16 md:px-8 xl:px-24 xxl:px-40">
-      <div>
+      <div class="container">
         <h2 class="text-2xl font-bold lg:text-3xl ">Need Help? Found a bug?</h2>
         <p class="w-full mx-auto mt-6 text-base text-gray-700 lg:w-1/2">File an issue on GitHub</p>
-        <a href="https://github.com/jmartsch/lazyframe/issues"
-          class="block mt-4 text-xl font-semibold text-blue-500">https://github.com/jmartsch/lazyframe/issues</a>
+        <a href="https://github.com/vb/lazyframe/issues"
+          class="block mt-4 text-xl font-semibold text-blue-500">https://github.com/vb/lazyframe/issues</a>
       </div>
     </section>
     <!-- end cta -->
-
-
-
   </main>
-
-
-
   <script src="dist/lazyframe.min.js"></script>
   <script>
     lazyframe('.lazyframe', {
