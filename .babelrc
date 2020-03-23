@@ -4,9 +4,6 @@
       "env",
       {
         "modules": false
-        // "targets": {
-        //   "chrome": "60"
-        // }
       }
     ]
   ],
