@@ -29,25 +29,21 @@ const Lazyframe = () => {
       youtube_nocookie: /(?:youtube-nocookie\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=)))([a-zA-Z0-9_-]{6,11})/,
       youtube: /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/,
       vimeo: /vimeo\.com\/(?:video\/)?([0-9]*)(?:\?|)/,
-      vine: /vine.co\/v\/(.*)/
     },
     condition: {
       youtube: (m) => (m && m[1].length == 11) ? m[1] : false,
       youtube_nocookie: (m) => (m && m[1].length == 11) ? m[1] : false,
       vimeo: (m) => (m && m[1].length === 9 || m[1].length === 8) ? m[1] : false,
-      vine: (m) => (m && m[1].length === 11) ? m[1] : false
     },
     src: {
       youtube: (s) => `https://www.youtube.com/embed/${s.id}/?${s.parameters}`,
       youtube_nocookie: (s) => `https://www.youtube-nocookie.com/embed/${s.id}/?${s.parameters}`,
       vimeo: (s) => `https://player.vimeo.com/video/${s.id}/?${s.parameters}`,
-      vine: (s) => `https://vine.co/v/${s.id}/embed/simple`
     },
     endpoints: {
       youtube: (s) => `https://www.googleapis.com/youtube/v3/videos?id=${s.id}&key=${s.apikey}&fields=items(snippet(title,thumbnails))&part=snippet`,
       youtube_nocookie: (s) => `https://www.googleapis.com/youtube/v3/videos?id=${s.id}&key=${s.apikey}&fields=items(snippet(title,thumbnails))&part=snippet`,
       vimeo: (s) => `https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/${s.id}`,
-      vine: (s) => `https://vine.co/oembed.json?url=https%3A%2F%2Fvine.co%2Fv%2F${s.id}`
     },
     response: {
       youtube: {
@@ -70,10 +66,6 @@ const Lazyframe = () => {
         title: (r) => r.title,
         thumbnail: (r) => r.thumbnail_url
       },
-      vine: {
-        title: (r) => r.title,
-        thumbnail: (r) => r.thumbnail_url
-      }
     }
   };
 
@@ -344,12 +336,6 @@ const Lazyframe = () => {
     iframeNode.setAttribute('src', settings.src);
     iframeNode.setAttribute('frameborder', 0);
     iframeNode.setAttribute('allowfullscreen', '');
-
-    if (settings.vendor === 'vine') {
-      const scriptNode = document.createElement('script');
-      scriptNode.setAttribute('src', 'https://platform.vine.co/static/scripts/embed.js');
-      docfrag.appendChild(scriptNode);
-    }
 
     docfrag.appendChild(iframeNode);
     return docfrag;
