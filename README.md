@@ -1,10 +1,10 @@
-# Lazyframe
+# LazyframeAdvanced
 
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
-Dependency-free library for lazyloading iframes. 
+Dependency-free library for lazyloading iframes and embeds like YouTube, Vimeo, Twitter, Google Maps, Codepen etc.
 
-Watch some examples here: [https://vb.github.io/lazyframe/](https://vb.github.io/lazyframe/)
+Watch some examples here: [https://jmartsch.github.io/lazyframeAdvanced](https://jmartsch.github.io/lazyframeAdvanced)
 
 ## Why?
 
@@ -18,7 +18,7 @@ For example here are the number of requests and filesizes of some well-known ser
 
 Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
 
-Lazyframe comes with brand-like themes for YouTube, Vimeo and Vine.
+Lazyframe comes with brand-like themes for YouTube and other services.
 
 1. [Install](#install)
 2. [Import](#import)
