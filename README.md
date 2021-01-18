@@ -1,6 +1,6 @@
 # LazyframeAdvanced
 
-[![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
+[comment]: <> ([![npm version]&#40;https://badge.fury.io/js/lazyframeAdvanced.svg&#41;]&#40;https://badge.fury.io/js/lazyframeAdvanced&#41;)
 
 Dependency-free library for lazyloading iframes and embeds like YouTube, Vimeo, Twitter, Google Maps, Codepen etc.
 
@@ -16,10 +16,15 @@ For example here are the number of requests and filesizes of some well-known ser
 * **Google maps** – 52 requests ≈ 580kb
 * **Vimeo** – 8 requests ≈ 145kb
 
-Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
+LazyframeAdvanced creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
 
-Lazyframe comes with brand-like themes for YouTube and other services.
+LazyframeAdvanced comes with brand-like themes for YouTube and other services.
 
+### Why Advanced?
+
+The original Lazyframe library seems abandoned and the original author does not respond to questions or pull requests anymore. As there are some services missing and we wanted to make some improvements, we created our own version.
+
+## Installation Instructions
 1. [Install](#install)
 2. [Import](#import)
 3. [Initialize](#Initialize)
@@ -32,13 +37,7 @@ Lazyframe comes with brand-like themes for YouTube and other services.
 NPM
 
 ```bash
-$ npm install lazyframe --save
-```
-
-Bower
-
-```bash
-$ bower install lazyframe
+$ npm install git+https://github.com/jmartsch/lazyframeAdvanced.git
 ```
 
 ### Import
@@ -46,7 +45,7 @@ $ bower install lazyframe
 JavaScript ES6 imports
 
 ```js
-import lazyframe from 'lazyframe';
+import lazyframe from 'lazyframeAdvanced';
 ```
 
 Include JavaScript in html
@@ -182,4 +181,5 @@ Set this to true if you want the resource to execute (for example video to play)
 
 ## License
 
+[MIT](https://opensource.org/licenses/MIT). © 2021 Jens Martsch
 [MIT](https://opensource.org/licenses/MIT). © 2016 Viktor Bergehall
