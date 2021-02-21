@@ -1,7 +1,7 @@
 {
   "name": "lazyframe",
   "description": "Dependency-free library for lazyloading iframes",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "author": "Viktor Bergehall",
   "bugs": {
     "url": "https://github.com/vb/lazyframe/issues"
