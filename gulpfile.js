@@ -3,9 +3,9 @@
 const fs = require('fs');
 const gulp = require('gulp');
 const sass = require('gulp-sass');
-const rollup = require('rollup');
-const babel = require('rollup-plugin-babel');
-const uglify = require('rollup-plugin-uglify');
+const { rollup } = require('rollup');
+const { babel } = require('@rollup/plugin-babel');
+const { uglify } = require('rollup-plugin-uglify');
 
 gulp.task('scss', () => {
   return gulp.src('src/scss/lazyframe.scss')
@@ -14,9 +14,8 @@ gulp.task('scss', () => {
 });
 
 gulp.task('js', () => {
-  return rollup
-    .rollup({
-      entry: 'src/lazyframe.js',
+  return rollup({
+      input: 'src/lazyframe.js',
       plugins: [
         babel({
           exclude: 'node_modules/**'
@@ -25,13 +24,13 @@ gulp.task('js', () => {
       ]
     })
     .then(bundle => {
-      const files = bundle.generate({
+      return bundle.write({
+        file: 'dist/lazyframe.min.js',
         format: 'umd',
         exports: 'default',
-        moduleName: 'lazyframe'
+        name: 'lazyframe',
+        sourcemap: true
       });
-
-      fs.writeFileSync('dist/lazyframe.min.js', files.code);
     });
 });
 
