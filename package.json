@@ -43,6 +43,7 @@
     "test": "npm run build && ava"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ]
 }
