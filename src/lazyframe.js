@@ -42,27 +42,19 @@ const Lazyframe = () => {
       vine: (s) => `https://vine.co/v/${s.id}/embed/simple`
     },
     endpoints: {
-      youtube: (s) => `https://www.googleapis.com/youtube/v3/videos?id=${s.id}&key=${s.apikey}&fields=items(snippet(title,thumbnails))&part=snippet`,
-      youtube_nocookie: (s) => `https://www.googleapis.com/youtube/v3/videos?id=${s.id}&key=${s.apikey}&fields=items(snippet(title,thumbnails))&part=snippet`,
+      youtube: (s) => `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${s.id}`,
+      youtube_nocookie: (s) => `https://noembed.com/embed?url=https://www.youtube.com/watch?v=${s.id}`,
       vimeo: (s) => `https://vimeo.com/api/oembed.json?url=https%3A//vimeo.com/${s.id}`,
       vine: (s) => `https://vine.co/oembed.json?url=https%3A%2F%2Fvine.co%2Fv%2F${s.id}`
     },
     response: {
       youtube: {
-        title: (r) => r.items['0'].snippet.title,
-        thumbnail: (r) => {
-          let thumbs = r.items["0"].snippet.thumbnails;
-          let thumb = thumbs.maxres || thumbs.standard || thumbs.high || thumbs.medium || thumbs.default;
-          return thumb.url;
-        }
+        title: (r) => r.title,
+        thumbnail: (r) => r.thumbnail_url
       },
       youtube_nocookie: {
-        title: (r) => r.items['0'].snippet.title,
-        thumbnail: (r) => {
-          let thumbs = r.items["0"].snippet.thumbnails;
-          let thumb = thumbs.maxres || thumbs.standard || thumbs.high || thumbs.medium || thumbs.default;
-          return thumb.url;
-        }
+        title: (r) => r.title,
+        thumbnail: (r) => r.thumbnail_url
       },
       vimeo: {
         title: (r) => r.title,
