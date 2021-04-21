@@ -342,6 +342,7 @@ const Lazyframe = () => {
     iframeNode.setAttribute('src', settings.src);
     iframeNode.setAttribute('frameborder', 0);
     iframeNode.setAttribute('allowfullscreen', '');
+    iframeNode.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
 
     if (settings.vendor === 'vine') {
       const scriptNode = document.createElement('script');
