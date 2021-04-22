@@ -52,7 +52,7 @@ Include JavaScript in html
 Sass import
 
 ```sass
-@import 'src/scss/lazyframe';
+@import 'src/scss/lazyframe'
 ```
 
 Include css in html
@@ -112,7 +112,7 @@ Set this to `false` if you want all API calls and local images to be loaded on p
 
 ### `autoplay`
 
-Set this to `false` it will off autoplay source video feature when lazyframe loaded.
+Set this to `false` to remove autoplay from the `allow` attribute on the iframe tag i.e if set this to `false` if you want don't want your Youtube video to automatically start playing once the user clicks on the play icon.
 
 ### `onLoad`
 
