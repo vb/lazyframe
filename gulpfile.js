@@ -5,7 +5,7 @@ const gulp = require('gulp');
 const sass = require('gulp-sass');
 const { rollup } = require('rollup');
 const { babel } = require('@rollup/plugin-babel');
-const { uglify } = require('rollup-plugin-uglify');
+const { terser } = require("rollup-plugin-terser");
 
 gulp.task('scss', () => {
   return gulp.src('src/scss/lazyframe.scss')
@@ -20,7 +20,7 @@ gulp.task('js', () => {
         babel({
           exclude: 'node_modules/**'
         }),
-        uglify()
+        terser()
       ]
     })
     .then(bundle => {
