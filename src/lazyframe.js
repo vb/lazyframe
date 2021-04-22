@@ -16,7 +16,7 @@ const Lazyframe = () => {
     y: undefined,
     debounce: 250,
     lazyload: true,
-    autoplay: false,
+    autoplay: true,
     initinview: false,
     onLoad: (l) => {},
     onAppend: (l) => {},

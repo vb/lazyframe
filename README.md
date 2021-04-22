@@ -87,6 +87,7 @@ lazyframe(elements, {
    apikey: undefined,
    debounce: 250,
    lazyload: true,
+   autoplay: true,
 
    // Callbacks
    onLoad: (lazyframe) => console.log(lazyframe),
@@ -108,6 +109,10 @@ Value (in milliseconds) for when the update function should run after the user h
 ### `lazyload`
 
 Set this to `false` if you want all API calls and local images to be loaded on page load (instead of when the element is in view).
+
+### `autoplay`
+
+Set this to `false` it will off autoplay source video feature when lazyframe loaded.
 
 ### `onLoad`
 
@@ -131,7 +136,8 @@ Callback function with the thumbnail URL
     data-thumbnail=""
     data-src=""
     data-ratio="1:1"
-    data-initinview="false">
+    data-initinview="false"
+    data-autoplay="false">
 </div>
 ```
 
