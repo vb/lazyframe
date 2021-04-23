@@ -84,7 +84,6 @@ General options and corresponding defaults
 
 ```js
 lazyframe(elements, {
-  apikey: undefined,
   debounce: 250,
   lazyload: true,
   autoplay: true,
@@ -95,12 +94,6 @@ lazyframe(elements, {
   onThumbnailLoad: (img) => console.log(img),
 });
 ```
-
-### `apikey`
-
-If you want to load a thumbnail and title for a YouTube video you'll have to have an API key with the YouTube data API library enabled. Get it from [here](https://console.developers.google.com/)
-
-_If you don't feel like getting a key, just use your own thumbnail and title in data-thumbnail and data-title attribute_
 
 ### `debounce`
 
