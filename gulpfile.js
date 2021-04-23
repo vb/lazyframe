@@ -18,7 +18,8 @@ gulp.task('js', () => {
       input: 'src/lazyframe.js',
       plugins: [
         babel({
-          exclude: 'node_modules/**'
+          exclude: 'node_modules/**',
+          babelHelpers: 'bundled'
         }),
         terser()
       ]
