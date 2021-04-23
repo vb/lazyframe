@@ -8,13 +8,13 @@ Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/laz
 
 Because embedded content takes time to load.
 
-* **Youtube** – 11 requests ≈ 580kb
-* **Google maps** – 52 requests ≈ 580kb
-* **Vimeo** – 8 requests ≈ 145kb
+- **Youtube** – 11 requests ≈ 580kb
+- **Google maps** – 52 requests ≈ 580kb
+- **Vimeo** – 8 requests ≈ 145kb
 
 Lazyframe creates a responsive placeholder for embedded content and requests it when the user interacts with it. This decreases the page load and idle time.
 
-Lazyframe comes with brand-like themes for Youtube, Vimeo and Vine.
+Lazyframe comes with brand-like themes for Youtube and Vimeo.
 
 1. [Install](#install)
 2. [Import](#import)
@@ -40,7 +40,7 @@ $ bower install lazyframe
 JavaScript ES6 imports
 
 ```js
-import lazyframe from 'lazyframe';
+import lazyframe from "lazyframe";
 ```
 
 Include JavaScript in html
@@ -58,21 +58,21 @@ Sass import
 Include css in html
 
 ```html
-<link rel="stylesheet" href="dist/lazyframe.css">
+<link rel="stylesheet" href="dist/lazyframe.css" />
 ```
 
 ### Initialize
 
 ```js
 // Passing a selector
-lazyframe('.lazyframe');
+lazyframe(".lazyframe");
 
 // Passing a nodelist
-let elements = document.querySelectorAll('.lazyframe');
+let elements = document.querySelectorAll(".lazyframe");
 lazyframe(elements);
 
 // Passing a jQuery object
-let elements = $('.lazyframe');
+let elements = $(".lazyframe");
 lazyframe(elements);
 ```
 
@@ -84,16 +84,16 @@ General options and corresponding defaults
 
 ```js
 lazyframe(elements, {
-   apikey: undefined,
-   debounce: 250,
-   lazyload: true,
-   autoplay: true,
+  apikey: undefined,
+  debounce: 250,
+  lazyload: true,
+  autoplay: true,
 
-   // Callbacks
-   onLoad: (lazyframe) => console.log(lazyframe),
-   onAppend: (iframe) => console.log(iframe),
-   onThumbnailLoad: (img) => console.log(img)
-})
+  // Callbacks
+  onLoad: (lazyframe) => console.log(lazyframe),
+  onAppend: (iframe) => console.log(iframe),
+  onThumbnailLoad: (img) => console.log(img),
+});
 ```
 
 ### `apikey`
@@ -130,20 +130,20 @@ Callback function with the thumbnail URL
 
 ```html
 <div
-    class="lazyframe"
-    data-vendor=""
-    data-title=""
-    data-thumbnail=""
-    data-src=""
-    data-ratio="1:1"
-    data-initinview="false"
-    data-autoplay="false">
-</div>
+  class="lazyframe"
+  data-vendor=""
+  data-title=""
+  data-thumbnail=""
+  data-src=""
+  data-ratio="1:1"
+  data-initinview="false"
+  data-autoplay="false"
+></div>
 ```
 
 ### `data-vendor`
 
-Attribute for theming lazyframe. Currently supported values are `youtube`, `youtube_nocookie`, `vimeo` and `vine`.
+Attribute for theming lazyframe. Currently supported values are `youtube`, `youtube_nocookie` and `vimeo`.
 
 ### `data-title`
 
