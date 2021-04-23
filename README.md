@@ -140,11 +140,11 @@ Attribute for theming lazyframe. Currently supported values are `youtube`, `yout
 
 ### `data-title`
 
-Attribute for custom title. Leave empty to get value from API.
+Attribute for custom title. Leave empty to get value from noembed.com.
 
 ### `data-thumbnail`
 
-Attribute for custom thumbnail. Leave empty to get value from API.
+Attribute for custom thumbnail. Leave empty to get value from noembed.com.
 
 ### `data-src`
 
