@@ -1,5 +1,5 @@
 # Lazyframe
-
+[![Node.js Package](https://github.com/vb/lazyframe/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/vb/lazyframe/actions/workflows/npm-publish.yml)
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
 Dependency-free library for lazyloading iframes. [Demo](https://vb.github.io/lazyframe/)
