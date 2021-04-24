@@ -12,10 +12,9 @@
     "@babel/preset-env": "^7.12.17",
     "@rollup/plugin-babel": "^5.3.0",
     "ava": "^3.15.0",
-    "gulp": "^4.0.2",
-    "gulp-sass": "^4.1.0",
     "jsdom": "15",
     "rollup": "^2.39.0",
+    "rollup-plugin-scss": "^2.6.1",
     "rollup-plugin-terser": "^7.0.2"
   },
   "homepage": "https://vb.github.io/lazyframe",
@@ -38,7 +37,7 @@
     "url": "git+https://github.com/vb/lazyframe.git"
   },
   "scripts": {
-    "build": "gulp",
+    "build": "./node_modules/.bin/rollup -c",
     "test": "npm run build && ava"
   },
   "files": [
