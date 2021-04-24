@@ -1,3 +1,5 @@
+import './scss/lazyframe.scss'
+
 const Lazyframe = () => {
 
   let settings;
