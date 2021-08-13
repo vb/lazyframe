@@ -11,6 +11,7 @@ const Lazyframe = () => {
     id: undefined,
     src: undefined,
     thumbnail: undefined,
+    thumbnailquality: 'hq',
     title: undefined,
     initialized: false,
     y: undefined,
@@ -155,7 +156,10 @@ const Lazyframe = () => {
           _l.settings.title = constants.response.title(response);
         }
         if (!_l.settings.thumbnail) {
-          const url = constants.response.thumbnail(response);
+          let url = constants.response.thumbnail(response);
+          if (_l.settings.thumbnailquality !== 'hq') {
+            url = url.replace('/hqdefault.jpg', `/${_l.settings.thumbnailquality}default.jpg`);
+          }
           _l.settings.thumbnail = url;
           lazyframe.settings.onThumbnailLoad.call(this, url);
         }
@@ -297,7 +301,7 @@ const Lazyframe = () => {
     iframeNode.setAttribute('src', settings.src);
     iframeNode.setAttribute('frameborder', 0);
     iframeNode.setAttribute('allowfullscreen', '');
-    
+
     if (settings.autoplay) {
       iframeNode.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
     }
