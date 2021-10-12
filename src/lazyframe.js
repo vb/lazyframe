@@ -39,15 +39,15 @@ const Lazyframe = () => {
       youtube: (s) =>
         `https://www.youtube.com/embed/${s.id}/?autoplay=${
           s.autoplay ? "1" : "0"
-        }`,
+        }&${s.query}`,
       youtube_nocookie: (s) =>
         `https://www.youtube-nocookie.com/embed/${s.id}/?autoplay=${
           s.autoplay ? "1" : "0"
-        }`,
+        }&${s.query}`,
       vimeo: (s) =>
         `https://player.vimeo.com/video/${s.id}/?autoplay=${
           s.autoplay ? "1" : "0"
-        }`,
+        }&${s.query}`,
     },
     endpoint: (s) => `https://noembed.com/embed?url=${s.src}`,
     response: {
@@ -124,7 +124,9 @@ const Lazyframe = () => {
       settings,
       attr,
       {
-        y: el.offsetTop
+        y: el.offsetTop,
+        originalSrc: attr.src,
+        query: getQuery(attr.src)
       }
     );
 
@@ -135,6 +137,11 @@ const Lazyframe = () => {
 
     return options;
 
+  }
+
+  function getQuery(src) {
+    const query = src.split('?');
+    return query[1] ? query[1] : null
   }
 
   function useApi(settings) {
