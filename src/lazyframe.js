@@ -2,6 +2,8 @@ import './scss/lazyframe.scss'
 
 const Lazyframe = () => {
 
+  const findVendorIdAndQuery = new RegExp(/^(?:https?:\/\/)?(?:www\.)?(youtube-nocookie|youtube|vimeo)(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w-_]+)(?:\&|\?|\/\?)?(.+)?$/);
+
   let settings;
 
   const elements = [];
@@ -23,41 +25,8 @@ const Lazyframe = () => {
     onThumbnailLoad: (img) => {}
   };
 
-  const constants = {
-    regex: {
-      youtube_nocookie: /(?:youtube-nocookie\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=)))([a-zA-Z0-9_-]{6,11})/,
-      youtube: /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/,
-      vimeo: /vimeo\.com\/(?:video\/)?([0-9]*)(?:\?|)/,
-    },
-    condition: {
-      youtube: (m) => (m && m[1].length == 11 ? m[1] : false),
-      youtube_nocookie: (m) => (m && m[1].length == 11 ? m[1] : false),
-      vimeo: (m) =>
-        (m && m[1].length === 9) || m[1].length === 8 ? m[1] : false,
-    },
-    src: {
-      youtube: (s) =>
-        `https://www.youtube.com/embed/${s.id}/?autoplay=${
-          s.autoplay ? "1" : "0"
-        }&${s.query}`,
-      youtube_nocookie: (s) =>
-        `https://www.youtube-nocookie.com/embed/${s.id}/?autoplay=${
-          s.autoplay ? "1" : "0"
-        }&${s.query}`,
-      vimeo: (s) =>
-        `https://player.vimeo.com/video/${s.id}/?autoplay=${
-          s.autoplay ? "1" : "0"
-        }&${s.query}`,
-    },
-    endpoint: (s) => `https://noembed.com/embed?url=${s.src}`,
-    response: {
-      title: (r) => r.title,
-      thumbnail: (r) => r.thumbnail_url,
-    },
-  };
-
   function init(elements, ...args) {
-    settings = Object.assign({}, defaults, args[0]);
+    settings = {...defaults, ...args[0]};
 
     if (typeof elements === 'string') {
 
@@ -87,8 +56,9 @@ const Lazyframe = () => {
 
   function loop(el) {
 
-    if(el instanceof HTMLElement === false ||
-       el.classList.contains('lazyframe--loaded')) return;
+    if (el instanceof HTMLElement === false || el.classList.contains('lazyframe--loaded')) {
+      return;
+    }
 
     const lazyframe = {
       el: el,
@@ -97,106 +67,64 @@ const Lazyframe = () => {
 
     lazyframe.el.addEventListener('click', () => {
       lazyframe.el.appendChild(lazyframe.iframe);
-
-      const iframe = el.querySelectorAll('iframe');
-      lazyframe.settings.onAppend.call(this, iframe[0]);
+      lazyframe.settings.onAppend.call(this, el.querySelector('iframe'));
     });
 
     if (settings.lazyload) {
-      build(lazyframe);
+      build(lazyframe, false);
     } else {
-      api(lazyframe, !!lazyframe.settings.thumbnail);
+      api(lazyframe);
     }
 
   }
 
   function setup(el) {
 
-    const attr = Array.prototype.slice.apply(el.attributes)
+    const attributes = Array.from(el.attributes)
      .filter(att => att.value !== '')
-     .reduce((obj, curr) => {
-        let name = curr.name.indexOf('data-') === 0 ? curr.name.split('data-')[1] : curr.name;
-        obj[name] = curr.value;
+     .filter(att => att.name.startsWith('data-'))
+     .reduce((obj, { name, value }) => {
+        const key = name.split('data-')[1];
+        obj[key] = value;
         return obj;
      }, {});
 
-    const options = Object.assign({},
-      settings,
-      attr,
-      {
+     if (!attributes.src) {
+       throw new Error('You must supply a data-src on the DOM Node');
+     } 
+    
+    const [,vendor, id, query = ''] = attributes.src.match(findVendorIdAndQuery) || [];
+    return {
+      ...settings,
+      ...attributes,
+      ...{
         y: el.offsetTop,
-        originalSrc: attr.src,
-        query: getQuery(attr.src)
+        id,
+        vendor,
+        query: `${query}${query ? '&' : ''}autoplay=${settings.autoplay ? '1' : '0'}`
       }
-    );
+    };
 
-    if (options.vendor) {
-      const match = options.src.match(constants.regex[options.vendor]);
-      options.id = constants.condition[options.vendor](match);
-    }
-
-    return options;
-
-  }
-
-  function getQuery(src) {
-    const query = src.split('?');
-    return query[1] ? query[1] : null
-  }
-
-  function useApi(settings) {
-    if (!settings.vendor) return false;
-    return !settings.title || !settings.thumbnail;
   }
 
   function api(lazyframe) {
+    if (lazyframe.settings.vendor) {
+      fetch(`https://noembed.com/embed?url=${lazyframe.settings.src}`)
+        .then(res => res.json())
+        .then(json => {
+          if (!lazyframe.settings.title) {
+            lazyframe.settings.title = json.title
+          }
+          if (!lazyframe.settings.thumbnail) {
+            lazyframe.settings.thumbnail = json.thumbnail_url;
+            lazyframe.settings.onThumbnailLoad.call(this, json.thumbnail_url);
+          }
 
-    if (useApi(lazyframe.settings)) {
-      send(lazyframe, (err, data) => {
-        if (err) return;
-
-        const response = data[0];
-        const _l = data[1];
-
-        if (!_l.settings.title) {
-          _l.settings.title = constants.response.title(response);
-        }
-        if (!_l.settings.thumbnail) {
-          const url = constants.response.thumbnail(response);
-          _l.settings.thumbnail = url;
-          lazyframe.settings.onThumbnailLoad.call(this, url);
-        }
-        build(_l, true);
-
-      });
-
+          build(lazyframe, true);  
+        })
     }else{
       build(lazyframe, true);
     }
-
-  }
-
-  function send(lazyframe, cb) {
-
-    const endpoint = constants.endpoint(lazyframe.settings);
-    const request = new XMLHttpRequest();
-
-    request.open('GET', endpoint, true);
-
-    request.onload = function() {
-      if (request.status >= 200 && request.status < 400) {
-        const data = JSON.parse(request.responseText);
-        cb(null, [data, lazyframe]);
-      } else {
-        cb(true);
-      }
-    };
-
-    request.onerror = function() {
-      cb(true);
-    };
-
-    request.send();
 
   }
 
@@ -269,8 +197,8 @@ const Lazyframe = () => {
     }
 
     if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
-      const docfrag = document.createDocumentFragment(),
-            titleNode = document.createElement('span');
+      const docfrag = document.createDocumentFragment();
+      const titleNode = document.createElement('span');
 
       titleNode.className = 'lazyframe__title';
       titleNode.innerHTML = lazyframe.settings.title;
@@ -296,8 +224,10 @@ const Lazyframe = () => {
     const docfrag = document.createDocumentFragment();
     const iframeNode = document.createElement('iframe');
 
-    if (settings.vendor) {
-      settings.src = constants.src[settings.vendor](settings);
+    if (settings.vendor === 'youtube' || settings.vendor === 'youtube-nocookie') {
+      settings.src = `https://www.${settings.vendor}.com/embed/${settings.id}/?${settings.query}`;
+    } else if (settings.vimeo) {
+      settings.src = `https://player.vimeo.com/video/${s.id}/?${settings.query}`
     }
 
     iframeNode.setAttribute('id', `lazyframe-${settings.id}`);
