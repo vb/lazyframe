@@ -40,7 +40,8 @@
   "scripts": {
     "build": "./node_modules/.bin/rollup -c",
     "dev": "./node_modules/.bin/rollup -c -w",
-    "test": "npm run build && ava"
+    "test": "npm run build && ava -s",
+    "test:watch": "npm run build && ava -s -w"
   },
   "files": [
     "dist",

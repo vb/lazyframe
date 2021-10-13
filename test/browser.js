@@ -12,18 +12,80 @@ const script = new Script(
   readFileSync(path.join(__dirname, '..', 'dist', 'lazyframe.min.js'))
 );
 
-const dom = new JSDOM(``, {
-  url: 'http://localhost:3000/',
-  referrer: 'http://localhost:3000/',
-  contentType: 'text/html',
-  includeNodeLocations: true,
-  resources: 'usable',
-  runScripts: 'dangerously',
-  virtualConsole
-});
+test.beforeEach(t => {
+  const dom = new JSDOM(``, {
+    includeNodeLocations: true,
+    resources: 'usable',
+    runScripts: 'dangerously',
+    virtualConsole
+  });
 
-dom.runVMScript(script);
+  dom.runVMScript(script);  
+  global.document = dom.window.document;
+  global.window = dom.window;
+})
+
+const createDomNode = (vendor, src) => {
+  const node = document.createElement('div');
+  node.classList.add('lazyframe');
+  node.setAttribute('data-src', src)
+  if (vendor) {
+    node.setAttribute('data-vendor', vendor)
+  }
+  document.body.appendChild(node);
+  return node;
+}
 
 test('should expose lazyframe()', (t) => {
-  t.true(typeof dom.window.lazyframe === 'function');
+  t.true(typeof window.lazyframe === 'function');
 });
+
+test('should initialize one node with a string selector', (t) => {
+  createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0') 
+  window.lazyframe('.lazyframe');
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1);
+})
+
+test('should initialize mulitple nodes with a string selector', (t) => {
+  createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDC/?rel=0') 
+  window.lazyframe('.lazyframe');
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2);
+})
+
+test('should initialize with a single node', (t) => {
+  const node = createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  window.lazyframe(node);
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1);
+})
+
+test('should initialize with a nodelist', (t) => {
+  createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDC/?rel=0')
+  const nodes = document.querySelectorAll('.lazyframe')
+  window.lazyframe(nodes);
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2);
+})
+
+test('should append an iframe on click', (t) => {
+  const node = createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  window.lazyframe('.lazyframe');
+  node.click();
+  
+  t.assert(node.querySelector('iframe'))
+})
+
+test('should call onAppend callback function', (t) => {
+  let i = 0;
+  const node1 = createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  const node2 = createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0') 
+  window.lazyframe('.lazyframe', {
+    onAppend() {
+      i++;
+    }
+  });
+  node1.click();
+  node2.click();
+  
+  t.is(i, 2)
+})
