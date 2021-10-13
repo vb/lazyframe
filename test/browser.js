@@ -25,12 +25,18 @@ test.beforeEach(t => {
   global.window = dom.window;
 })
 
-const createDomNode = (vendor, src) => {
+const createDomNode = (vendor, src, title, thumbnail) => {
   const node = document.createElement('div');
   node.classList.add('lazyframe');
   node.setAttribute('data-src', src)
   if (vendor) {
     node.setAttribute('data-vendor', vendor)
+  }
+  if (title) {
+    node.setAttribute('data-title', title);
+  }
+  if (thumbnail) {
+    node.setAttribute('data-thumbnail', thumbnail);
   }
   document.body.appendChild(node);
   return node;
@@ -88,4 +94,14 @@ test('should call onAppend callback function', (t) => {
   node2.click();
   
   t.is(i, 2)
+})
+
+test('should use data-title', (t) => {
+  const title = 'custom title'
+  const node = createDomNode('youtube', 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0', title) 
+
+  window.lazyframe('.lazyframe');
+
+  node.click()
+  t.is(document.querySelector('.lazyframe__title').textContent, title)
 })
