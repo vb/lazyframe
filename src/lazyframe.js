@@ -34,18 +34,12 @@ const Lazyframe = () => {
       for (let i = 0; i < selector.length; i++) {
         loop(selector[i]);
       }
-
     } else if (typeof elements.length === 'undefined'){
       loop(elements);
-
-    } else if (elements.length > 1) {
-
+    } else {
       for (let i = 0; i < elements.length; i++) {
         loop(elements[i]);
       }
-
-    } else {
-      loop(elements[0]);
     }
 
     if (settings.lazyload) {
