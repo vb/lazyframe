@@ -1,119 +1,179 @@
-const path = require('path');
-const { readFileSync } = require('fs');
-const { Script } = require('vm');
+const path = require('path')
+const { readFileSync } = require('fs')
+const { Script } = require('vm')
 
-const test = require('ava');
-const { JSDOM, VirtualConsole } = require('jsdom');
+const test = require('ava')
+const { JSDOM, VirtualConsole } = require('jsdom')
 
-const virtualConsole = new VirtualConsole();
-virtualConsole.sendTo(console);
+const MockXMLHttpRequest = require('mock-xmlhttprequest')
+const MockXhr = MockXMLHttpRequest.newMockXhr()
+
+MockXhr.onSend = (xhr) => {
+  const responseHeaders = { 'Content-Type': 'application/json' }
+  const response =
+    '{ "title": "mock title", "thumbnail_url": "mock thumbnail url" }'
+  xhr.respond(200, responseHeaders, response)
+}
+
+const virtualConsole = new VirtualConsole()
+virtualConsole.sendTo(console)
 
 const script = new Script(
   readFileSync(path.join(__dirname, '..', 'dist', 'lazyframe.min.js'))
-);
+)
 
-test.beforeEach(t => {
+test.beforeEach(() => {
   const dom = new JSDOM(``, {
     includeNodeLocations: true,
     resources: 'usable',
     runScripts: 'dangerously',
-    virtualConsole
-  });
+    virtualConsole,
+  })
 
-  dom.runVMScript(script);  
-  global.document = dom.window.document;
-  global.window = dom.window;
+  dom.runVMScript(script)
+  global.document = dom.window.document
+  dom.window.XMLHttpRequest = MockXhr
+  global.window = dom.window
 })
 
 const createDomNode = (params = {}) => {
-  const node = document.createElement('div');
-  node.classList.add('lazyframe');
-  for (const [ key, value ] of Object.entries(params)) {
+  const node = document.createElement('div')
+  node.classList.add('lazyframe')
+  for (const [key, value] of Object.entries(params)) {
     node.setAttribute(`data-${key}`, value)
   }
-  document.body.appendChild(node);
-  return node;
+  document.body.appendChild(node)
+  return node
 }
 
-test('should expose lazyframe()', (t) => {
-  t.true(typeof window.lazyframe === 'function');
-});
+const lazyframe = (initializer = '.lazyframe', config = {}) => {
+  return new Promise((resolve) => {
+    let i = 0
+    const nodes = window.lazyframe(initializer, {
+      ...config,
+      onLoad: () => {
+        i++
+        if (i === nodes.length) {
+          resolve()
+        }
+      },
+    })
+  })
+}
 
-test('should initialize one node with a string selector', (t) => {
-  createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
-  window.lazyframe('.lazyframe');
-  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1);
+test('should expose lazyframe()', async (t) => {
+  t.true(typeof window.lazyframe === 'function')
 })
 
-test('should initialize mulitple nodes with a string selector', (t) => {
-  createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
-  createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
-
-  window.lazyframe('.lazyframe');
-  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2);
+test('should initialize one node with a string selector', async (t) => {
+  createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
+  await lazyframe()
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1)
 })
 
-test('should initialize with a single node', (t) => {
-  const node = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
+test('should initialize mulitple nodes with a string selector', async (t) => {
+  createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
+  createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
 
-  window.lazyframe(node);
-  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1);
+  await lazyframe()
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2)
 })
 
-test('should initialize with a nodelist', (t) => {
-  createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0' });
-  createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDC/?rel=0' });
+test('should initialize with a single node', async (t) => {
+  const node = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
+
+  await lazyframe(node)
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 1)
+})
+
+test('should initialize with a nodelist', async (t) => {
+  createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0',
+  })
+  createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDC/?rel=0',
+  })
 
   const nodes = document.querySelectorAll('.lazyframe')
-  window.lazyframe(nodes);
-  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2);
+  await lazyframe(nodes)
+  t.is(document.querySelectorAll('.lazyframe--loaded').length, 2)
 })
 
-test('should append an iframe on click', (t) => {
-  const node = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
+test('should append an iframe on click', async (t) => {
+  const node = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
 
-  window.lazyframe('.lazyframe');
-  node.click();
-  
+  await lazyframe()
+  node.click()
+
   t.assert(node.querySelector('iframe'))
 })
 
-test('should call onAppend callback function', (t) => {
-  let i = 0;
-  const node1 = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
-  const node2 = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0' });
+test('should call onAppend callback function', async (t) => {
+  let i = 0
+  const node1 = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
+  const node2 = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+  })
 
-  window.lazyframe('.lazyframe', {
+  await lazyframe('.lazyframe', {
     onAppend() {
-      i++;
-    }
-  });
-  node1.click();
-  node2.click();
-  
+      i++
+    },
+  })
+  node1.click()
+  node2.click()
+
   t.is(i, 2)
 })
 
-test('should use data-title', (t) => {
+test('should use data-title', async (t) => {
   const title = 'custom title'
-  const node = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0', title });
+  const node = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
+    title,
+  })
 
-  window.lazyframe('.lazyframe');
+  await lazyframe()
 
   node.click()
   t.is(document.querySelector('.lazyframe__title').textContent, title)
 })
 
-test('should append optional query params from data-src', (t) => {
+test('should append optional query params from data-src', async (t) => {
   const query = 'rel=0&p=1'
-  const node = createDomNode({ vendor: 'youtube', src: 'http://www.youtube.com/embed/iwGFalTRHDA/?' + query });
-  
-  window.lazyframe('.lazyframe');
+  const node = createDomNode({
+    vendor: 'youtube',
+    src: 'http://www.youtube.com/embed/iwGFalTRHDA/?' + query,
+  })
+
+  await lazyframe()
 
   node.click()
-  const iframe = node.querySelector('iframe');
-  const src = iframe.getAttribute('src');
-  const [,iframQuery] = src.split('?autoplay=1&')
+  const iframe = node.querySelector('iframe')
+  const src = iframe.getAttribute('src')
+  const [, iframQuery] = src.split('?autoplay=1&')
 
-  t.is(iframQuery, query);
+  t.is(iframQuery, query)
 })

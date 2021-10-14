@@ -53,20 +53,20 @@
 <body>
   <div class="container">
     <p>Youtube video with thumbnail and title from API</p>
-    <div class="lazyframe" data-src="https://www.youtube.com/embed/ara1uUvajoU?rel=0" data-vendor="youtube">
+    <div class="lazyframe" data-src="https://www.youtube.com/embed/ara1uUvajoU?rel=0">
     </div>
 
     <p>Youtube video with custom thumbnail and title</p>
-    <div class="lazyframe" data-src="https://www.youtube.com/embed/ara1uUvajoU" data-vendor="youtube"
-      data-title="Custom title" data-thumbnail="https://placekitten.com/500/281">
+    <div class="lazyframe" data-src="https://www.youtube.com/embed/ara1uUvajoU" data-title="Custom title"
+      data-thumbnail="https://placekitten.com/500/281">
     </div>
 
     <p>Vimeo video with thumbnail and title from API</p>
-    <div class="lazyframe" data-src="https://vimeo.com/45915667" data-vendor="vimeo">
+    <div class="lazyframe" data-src="https://vimeo.com/45915667">
     </div>
 
     <p>Vimeo video with custom thumbnail and title</p>
-    <div class="lazyframe" data-src="https://vimeo.com/183524061" data-vendor="vimeo" data-title="Custom title"
+    <div class="lazyframe" data-src="https://vimeo.com/183524061" data-title="Custom title"
       data-thumbnail="https://placekitten.com/500/281">
     </div>
 
@@ -78,18 +78,13 @@
 
     <p>Google maps iframe with custom thumbnail and title that gets executed when in view</p>
     <div class="lazyframe lazyframe--custom"
-      data-src="https://www.google.com/maps/embed/v1/place?q=place_id:ChIJ8fA1bTmyXEYRYm-tjaLruCI&key=AIzaSyDQxRfx3HQrE0_oTFI2WHzoiGL_CM0JJfQ"
+      data-src="https://www.surveymonkey.com/r/?sm=%2bd%2bdWobuoz7irMV%2fpzKPcJmrKosuGWSraJtIrFQ4wBQ%3d"
       data-title="Something completely different" data-initinview="true">
     </div>
   </div>
   <script src="./dist/lazyframe.min.js"></script>
   <script>
-    lazyframe('.lazyframe', {
-      //lazyload: false,
-      onAppend: (e) => {
-        console.log(e);
-      }
-    });
+    lazyframe('.lazyframe');
   </script>
 </body>
 
