@@ -1,12 +1,11 @@
 import './scss/lazyframe.scss'
 
 const Lazyframe = () => {
+  const findVendorIdAndQuery = new RegExp(
+    /^(?:https?:\/\/)?(?:www\.)?(youtube-nocookie|youtube|vimeo)(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w-_]+)(?:\&|\?|\/\?)?(.+)?$/
+  )
 
-  const findVendorIdAndQuery = new RegExp(/^(?:https?:\/\/)?(?:www\.)?(youtube-nocookie|youtube|vimeo)(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w-_]+)(?:\&|\?|\/\?)?(.+)?$/);
-
-  let settings;
-
-  const elements = [];
+  const nodes = []
 
   const defaults = {
     vendor: undefined,
@@ -14,234 +13,222 @@ const Lazyframe = () => {
     src: undefined,
     thumbnail: undefined,
     title: undefined,
-    initialized: false,
-    y: undefined,
     debounce: 250,
     lazyload: true,
     autoplay: true,
     initinview: false,
-    onLoad: (l) => {},
-    onAppend: (l) => {},
-    onThumbnailLoad: (img) => {}
-  };
+    onLoad: () => {},
+    onAppend: () => {},
+    onThumbnailLoad: () => {},
+  }
 
-  function init(elements, ...args) {
-    settings = {...defaults, ...args[0]};
+  function init(initializer, globalConfig) {
+    const settings = { ...defaults, ...globalConfig }
 
-    if (typeof elements === 'string') {
+    const selection =
+      typeof initializer === 'string'
+        ? document.querySelectorAll(initializer)
+        : typeof initializer.length === 'undefined'
+        ? [initializer]
+        : initializer
 
-      const selector = document.querySelectorAll(elements);
-      for (let i = 0; i < selector.length; i++) {
-        loop(selector[i]);
-      }
-    } else if (typeof elements.length === 'undefined'){
-      loop(elements);
-    } else {
-      for (let i = 0; i < elements.length; i++) {
-        loop(elements[i]);
+    for (const node of selection) {
+      if (node instanceof HTMLElement) {
+        loop(node, settings)
       }
     }
 
     if (settings.lazyload) {
-      scroll();
+      scroll(settings.debounce)
     }
-
   }
 
-  function loop(el) {
-
-    if (el instanceof HTMLElement === false || el.classList.contains('lazyframe--loaded')) {
-      return;
+  function loop(node, settings) {
+    if (node.classList.contains('lazyframe--loaded')) {
+      return
     }
 
     const lazyframe = {
-      el: el,
-      settings: setup(el),
-    };
-
-    lazyframe.el.addEventListener('click', () => {
-      lazyframe.el.appendChild(lazyframe.iframe);
-      lazyframe.settings.onAppend.call(this, el.querySelector('iframe'));
-    });
-
-    if (settings.lazyload) {
-      build(lazyframe, false);
-    } else {
-      api(lazyframe);
+      ...settings,
+      ...setup(node, settings),
+      node,
+      initialized: false,
     }
 
+    lazyframe.node.addEventListener('click', () => {
+      lazyframe.node.appendChild(lazyframe.iframe)
+      lazyframe.onAppend.call(this, node.querySelector('iframe'))
+    })
+
+    if (settings.lazyload) {
+      build(lazyframe, false)
+    } else {
+      api(lazyframe)
+    }
   }
 
-  function setup(el) {
+  function setup(node, settings) {
+    const src = node.getAttribute('data-src')
+    const title = node.getAttribute('data-title')
+    const thumbnail = node.getAttribute('data-thumbnail')
+    const initinview = node.getAttribute('data-initinview')
 
-    const attributes = Array.from(el.attributes)
-     .filter(att => att.value !== '')
-     .filter(att => att.name.startsWith('data-'))
-     .reduce((obj, { name, value }) => {
-        const key = name.split('data-')[1];
-        obj[key] = value;
-        return obj;
-     }, {});
+    if (!src) {
+      throw new Error('You must supply a data-src on the node')
+    }
 
-     if (!attributes.src) {
-       throw new Error('You must supply a data-src on the DOM Node');
-     } 
-    
-    const [,vendor, id, query = ''] = attributes.src.match(findVendorIdAndQuery) || [];
+    const [, vendor, id, params] = src.match(findVendorIdAndQuery) || []
+    const autoplay = settings.autoplay ? 1 : 0
+    const query = params ? '&' + params : ''
     return {
-      ...settings,
-      ...attributes,
-      ...{
-        y: el.offsetTop,
-        id,
-        vendor,
-        query: `${query}${query ? '&' : ''}autoplay=${settings.autoplay ? '1' : '0'}`
-      }
-    };
-
+      src,
+      title,
+      thumbnail,
+      initinview,
+      id,
+      vendor,
+      useApi: vendor && (!title || !thumbnail),
+      query: `autoplay=${autoplay}${query}`,
+    }
   }
 
   function api(lazyframe) {
-    if (lazyframe.settings.vendor) {
-      fetch(`https://noembed.com/embed?url=${lazyframe.settings.src}`)
-        .then(res => res.json())
-        .then(json => {
-          if (!lazyframe.settings.title) {
-            lazyframe.settings.title = json.title
+    if (lazyframe.useApi) {
+      const xhr = new XMLHttpRequest()
+      xhr.open('GET', `https://noembed.com/embed?url=${lazyframe.src}`)
+      xhr.onload = function () {
+        if (this.status === 200) {
+          const json = JSON.parse(xhr.response)
+          console.log(json)
+          if (!lazyframe.title) {
+            lazyframe.title = json.title
           }
-          if (!lazyframe.settings.thumbnail) {
-            lazyframe.settings.thumbnail = json.thumbnail_url;
-            lazyframe.settings.onThumbnailLoad.call(this, json.thumbnail_url);
+          if (!lazyframe.thumbnail) {
+            lazyframe.thumbnail = json.thumbnail_url
+            lazyframe.onThumbnailLoad.call(this, json.thumbnail_url)
           }
-
-          build(lazyframe, true);  
-        })
-    }else{
-      build(lazyframe, true);
+          build(lazyframe, true)
+        }
+      }
+      xhr.send()
+    } else {
+      build(lazyframe, true)
     }
-
   }
 
-  function scroll() {
+  function onLoad(lazyframe) {
+    lazyframe.node.classList.add('lazyframe--loaded')
+    if (lazyframe.initinview) {
+      lazyframe.node.click()
+    }
+    lazyframe.onLoad.call(this, lazyframe)
+  }
 
-    const height = window.innerHeight;
-    let count = elements.length;
-    const initElement = (el, i) => {
-      el.settings.initialized = true;
-      el.el.classList.add('lazyframe--loaded');
-      count--;
-      api(el);
-
-      if (el.settings.initinview) {
-        el.el.click();
-      }
-
-      el.settings.onLoad.call(this, el);
+  function scroll(debounceMs) {
+    const initElement = (lazyframe) => {
+      lazyframe.initialized = true
+      api(lazyframe)
+      onLoad(lazyframe)
     }
 
-    elements
-      .filter(el => el.settings.y < height)
-      .forEach(initElement);
+    nodes
+      .filter((lf) => lf.node.offsetTop < window.innerHeight)
+      .forEach(initElement)
+
+    let lastY = 0
 
     const onScroll = debounce(() => {
+      const scrollDown = lastY < window.pageYOffset
+      lastY = window.pageYOffset
 
-      up = lastY < window.pageYOffset;
-      lastY = window.pageYOffset;
-
-      if (up) {
-        elements
-          .filter(el => el.settings.y < (height + lastY) && el.settings.initialized === false)
-          .forEach(initElement);
+      if (scrollDown) {
+        nodes
+          .filter((lf) => lf.initialized === false)
+          .filter((lf) => lf.node.offsetTop < window.innerHeight + lastY)
+          .forEach(initElement)
       }
 
-      if (count === 0) {
-        window.removeEventListener('scroll', onScroll, false);
+      if (nodes.filter((lf) => !lf.initialized).length < 1) {
+        window.removeEventListener('scroll', onScroll, false)
       }
+    }, debounceMs)
 
-    }, settings.debounce);
+    window.addEventListener('scroll', onScroll, false)
+  }
 
-    let lastY = 0;
-    let up = false;
-
-    window.addEventListener('scroll', onScroll, false);
-
-    function debounce(func, wait, immediate) {
-      let timeout;
-      return function() {
-        let context = this, args = arguments;
-        let later = function() {
-          timeout = null;
-          if (!immediate) func.apply(context, args);
-        };
-        let callNow = immediate && !timeout;
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-        if (callNow) func.apply(context, args);
-      };
-    };
-
+  function debounce(func, wait) {
+    let timeout
+    return function () {
+      let later = () => {
+        timeout = null
+        func.apply(this)
+      }
+      let callNow = !timeout
+      clearTimeout(timeout)
+      timeout = setTimeout(later, wait)
+      if (callNow) func.apply(this)
+    }
   }
 
   function build(lazyframe, loadImage) {
+    lazyframe.iframe = getIframe(lazyframe)
 
-    lazyframe.iframe = getIframe(lazyframe.settings);
-
-    if (lazyframe.settings.thumbnail && loadImage) {
-      lazyframe.el.style.backgroundImage = `url(${lazyframe.settings.thumbnail})`;
+    if (lazyframe.thumbnail && loadImage) {
+      lazyframe.node.style.backgroundImage = `url(${lazyframe.thumbnail})`
     }
 
-    if (lazyframe.settings.title && lazyframe.el.children.length === 0) {
-      const docfrag = document.createDocumentFragment();
-      const titleNode = document.createElement('span');
+    if (lazyframe.title && lazyframe.node.children.length === 0) {
+      const docfrag = document.createDocumentFragment()
+      const titleNode = document.createElement('span')
 
-      titleNode.className = 'lazyframe__title';
-      titleNode.innerHTML = lazyframe.settings.title;
-      docfrag.appendChild(titleNode);
+      titleNode.className = 'lazyframe__title'
+      titleNode.innerHTML = lazyframe.title
+      docfrag.appendChild(titleNode)
 
-      lazyframe.el.appendChild(docfrag);
+      lazyframe.node.appendChild(docfrag)
     }
 
-    if (!settings.lazyload) {
-      lazyframe.el.classList.add('lazyframe--loaded');
-      lazyframe.settings.onLoad.call(this, lazyframe);
-      elements.push(lazyframe);
+    if (!lazyframe.lazyload) {
+      lazyframe.node.classList.add('lazyframe--loaded')
+      lazyframe.onLoad.call(this, lazyframe)
+      nodes.push(lazyframe)
     }
 
-    if (!lazyframe.settings.initialized) {
-      elements.push(lazyframe);
+    if (!lazyframe.initialized) {
+      nodes.push(lazyframe)
     }
-
   }
 
-  function getIframe(settings) {
+  function getIframe(lazyframe) {
+    const docfrag = document.createDocumentFragment()
+    const iframeNode = document.createElement('iframe')
 
-    const docfrag = document.createDocumentFragment();
-    const iframeNode = document.createElement('iframe');
-
-    if (settings.vendor === 'youtube' || settings.vendor === 'youtube-nocookie') {
-      settings.src = `https://www.${settings.vendor}.com/embed/${settings.id}/?${settings.query}`;
-    } else if (settings.vimeo) {
-      settings.src = `https://player.vimeo.com/video/${s.id}/?${settings.query}`
+    if (
+      lazyframe.vendor === 'youtube' ||
+      lazyframe.vendor === 'youtube-nocookie'
+    ) {
+      lazyframe.src = `https://www.${lazyframe.vendor}.com/embed/${lazyframe.id}/?${lazyframe.query}`
+    } else if (lazyframe.vimeo) {
+      lazyframe.src = `https://player.vimeo.com/video/${s.id}/?${lazyframe.query}`
     }
 
-    iframeNode.setAttribute('id', `lazyframe-${settings.id}`);
-    iframeNode.setAttribute('src', settings.src);
-    iframeNode.setAttribute('frameborder', 0);
-    iframeNode.setAttribute('allowfullscreen', '');
-    
-    if (settings.autoplay) {
-      iframeNode.allow = 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture';
+    iframeNode.setAttribute('id', `lazyframe-${lazyframe.id}`)
+    iframeNode.setAttribute('src', lazyframe.src)
+    iframeNode.setAttribute('frameborder', 0)
+    iframeNode.setAttribute('allowfullscreen', '')
+
+    if (lazyframe.autoplay) {
+      iframeNode.allow =
+        'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
     }
 
-    docfrag.appendChild(iframeNode);
-    return docfrag;
-
+    docfrag.appendChild(iframeNode)
+    return docfrag
   }
 
-  return init;
-
+  return init
 }
 
-const lf = Lazyframe();
+const lf = Lazyframe()
 
-export default lf;
+export default lf
