@@ -84,7 +84,8 @@
   </div>
   <script src="./dist/lazyframe.min.js"></script>
   <script>
-    lazyframe('.lazyframe');
+    const nodes = document.querySelectorAll('.lazyframe');
+    lazyframe(nodes);
   </script>
 </body>
 

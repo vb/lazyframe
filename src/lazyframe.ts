@@ -1,4 +1,31 @@
-import './scss/lazyframe.scss'
+import './lazyframe.css'
+
+interface LazyframeObject extends LazyframeSettings {
+  node: HTMLElement
+}
+
+interface LazyframeSettings {
+  src: string
+  embed: string
+  title: string | null
+  thumbnail: string | null
+  initinview: boolean | null
+  id: string | null
+  vendor: 'youtube' | 'youtube-nocookie' | 'vimeo' | null
+  useApi: boolean
+  query: string
+  initialized: boolean
+  iframeNode: DocumentFragment
+}
+
+interface LazyframeOptions {
+  debounce: number
+  lazyload: boolean
+  autoplay: boolean
+  onLoad: (node: HTMLElement) => void
+  onAppend: (node: HTMLElement | null) => void
+  onThumbnailLoad: (url: string) => void
+}
 
 const Lazyframe = () => {
   const findVendorIdAndQuery = new RegExp(
@@ -10,10 +37,10 @@ const Lazyframe = () => {
     title: 'lazyframe__title',
   }
 
-  const nodes = []
+  const nodes: LazyframeObject[] = []
 
-  let settings = {
-    debounce: 250,
+  let settings: LazyframeOptions = {
+    debounce: 100,
     lazyload: true,
     autoplay: true,
     onLoad: () => {},
@@ -21,15 +48,18 @@ const Lazyframe = () => {
     onThumbnailLoad: () => {},
   }
 
-  function init(initializer, config) {
+  function init(
+    initializer: string | HTMLElement | NodeList,
+    config: Partial<LazyframeOptions>
+  ) {
     settings = { ...settings, ...config }
 
     const selection =
       typeof initializer === 'string'
         ? document.querySelectorAll(initializer)
-        : typeof initializer.length === 'undefined'
-        ? [initializer]
-        : initializer
+        : initializer instanceof NodeList
+        ? initializer
+        : [initializer]
 
     for (const node of selection) {
       if (node instanceof HTMLElement) {
@@ -44,12 +74,12 @@ const Lazyframe = () => {
     return nodes
   }
 
-  function create(node) {
+  function create(node: HTMLElement) {
     if (node.classList.contains(classNames.loaded)) {
       return
     }
 
-    const lazyframe = {
+    const lazyframe: LazyframeObject = {
       ...getSettingsFromNode(node),
       node,
     }
@@ -57,12 +87,10 @@ const Lazyframe = () => {
     const titleNode = createTitleNode(lazyframe)
     lazyframe.node.appendChild(titleNode)
 
-    lazyframe.iframeNode = createIframeNode(lazyframe)
-
     lazyframe.node.addEventListener('click', onClick, { once: true })
     function onClick() {
       lazyframe.node.appendChild(lazyframe.iframeNode)
-      settings.onAppend.call(this, node.querySelector('iframe'))
+      settings.onAppend.call(null, node.querySelector('iframe'))
     }
 
     nodes.push(lazyframe)
@@ -74,7 +102,7 @@ const Lazyframe = () => {
     }
   }
 
-  function createTitleNode(lazyframe) {
+  function createTitleNode(lazyframe: LazyframeObject) {
     const fragment = document.createDocumentFragment()
     const titleNode = document.createElement('span')
 
@@ -88,23 +116,30 @@ const Lazyframe = () => {
     return fragment
   }
 
-  function getSettingsFromNode(node) {
+  function getSettingsFromNode(node: HTMLElement): LazyframeSettings {
     const src = node.getAttribute('data-src')
     const title = node.getAttribute('data-title')
     const thumbnail = node.getAttribute('data-thumbnail')
-    const initinview = node.getAttribute('data-initinview')
+    const initinview = node.getAttribute('data-initinview') === 'true'
 
     if (!src) {
       throw new Error('You must supply a data-src on the node')
     }
 
-    const [, vendor, id, params] = src.match(findVendorIdAndQuery) || []
+    const [, vendorObj, id, params] = src.match(findVendorIdAndQuery) || []
+    const vendor = vendorObj ? (vendorObj as LazyframeSettings['vendor']) : null
     if (vendor) {
-      node.setAttribute('data-vendor', vendor)
+      if (vendor === 'youtube-nocookie') {
+        node.setAttribute('data-vendor', 'youtube')
+      } else {
+        node.setAttribute('data-vendor', vendor)
+      }
     }
 
-    const autoplay = settings.autoplay ? 1 : 0
-    const query = params ? '&' + params : ''
+    const query = `autoplay=${settings.autoplay ? 1 : 0}${
+      params ? '&' + params : ''
+    }`
+
     return {
       src,
       title,
@@ -112,13 +147,15 @@ const Lazyframe = () => {
       initinview,
       id,
       vendor,
-      useApi: vendor && (!title || !thumbnail),
-      query: `autoplay=${autoplay}${query}`,
+      embed: src,
+      useApi: !!vendor && (!title || !thumbnail),
+      query,
       initialized: false,
+      iframeNode: createIframeNode(vendor, query, src, id),
     }
   }
 
-  function fetchFromApi(lazyframe) {
+  function fetchFromApi(lazyframe: LazyframeObject): Promise<LazyframeObject> {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest()
       xhr.open('GET', `https://noembed.com/embed?url=${lazyframe.src}`)
@@ -140,7 +177,7 @@ const Lazyframe = () => {
     })
   }
 
-  function createPlaceholder(lazyframe) {
+  function createPlaceholder(lazyframe: LazyframeObject) {
     if (lazyframe.useApi) {
       fetchFromApi(lazyframe).then(populatePlaceholder)
     } else {
@@ -148,10 +185,10 @@ const Lazyframe = () => {
     }
   }
 
-  function populatePlaceholder(lazyframe) {
+  function populatePlaceholder(lazyframe: LazyframeObject) {
     const titleNode = lazyframe.node.querySelector('.lazyframe__title')
 
-    if (lazyframe.title && titleNode.innerHTML === '') {
+    if (lazyframe.title && titleNode && titleNode.innerHTML === '') {
       titleNode.innerHTML = lazyframe.title
     }
     if (lazyframe.thumbnail) {
@@ -160,13 +197,13 @@ const Lazyframe = () => {
     onLoad(lazyframe)
   }
 
-  function onLoad(lazyframe) {
+  function onLoad(lazyframe: LazyframeObject) {
     lazyframe.node.classList.add(classNames.loaded)
     lazyframe.initialized = true
     if (lazyframe.initinview) {
       lazyframe.node.click()
     }
-    settings.onLoad.call(this, lazyframe.node)
+    settings.onLoad.call(null, lazyframe.node)
   }
 
   function scroll() {
@@ -195,42 +232,46 @@ const Lazyframe = () => {
     window.addEventListener('scroll', onScroll, false)
   }
 
-  function debounce(func, wait) {
-    let timeout
+  function debounce(func: () => void, wait: number) {
+    let timeout: null | NodeJS.Timeout
     return function () {
       let later = () => {
         timeout = null
-        func.apply(this)
+        func.apply(null)
       }
       let callNow = !timeout
-      clearTimeout(timeout)
+      if (timeout) {
+        clearTimeout(timeout)
+      }
       timeout = setTimeout(later, wait)
-      if (callNow) func.apply(this)
+      if (callNow) func.apply(null)
     }
   }
 
-  function createIframeNode(lazyframe) {
+  function createIframeNode(
+    vendor: LazyframeObject['vendor'] | '' = '',
+    query: string,
+    src: string,
+    id: string
+  ) {
     const docfrag = document.createDocumentFragment()
     const iframeNode = document.createElement('iframe')
 
-    const vendor = lazyframe.vendor || ''
-
-    if (vendor.indexOf('youtube') > -1) {
-      lazyframe.embed = `https://www.${vendor}.com/embed/${lazyframe.id}/?${lazyframe.query}`
+    let embed = src
+    if (vendor && vendor.indexOf('youtube') > -1) {
+      embed = `https://www.${vendor}.com/embed/${id}/?${query}`
     } else if (vendor === 'vimeo') {
-      lazyframe.embed = `https://player.vimeo.com/video/${lazyframe.id}/?${lazyframe.query}`
-    } else {
-      lazyframe.embed = lazyframe.src
+      embed = `https://player.vimeo.com/video/${id}/?${query}`
     }
 
-    if (lazyframe.id) {
-      iframeNode.setAttribute('id', `lazyframe-${lazyframe.id}`)
+    if (id) {
+      iframeNode.setAttribute('id', `lazyframe-${id}`)
     }
-    iframeNode.setAttribute('src', lazyframe.embed)
-    iframeNode.setAttribute('frameborder', 0)
+    iframeNode.setAttribute('src', embed)
+    iframeNode.setAttribute('frameborder', '0')
     iframeNode.setAttribute('allowfullscreen', '')
 
-    if (lazyframe.autoplay) {
+    if (settings.autoplay) {
       iframeNode.allow =
         'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture'
     }
