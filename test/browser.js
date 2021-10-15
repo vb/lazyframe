@@ -5,14 +5,17 @@ const { Script } = require('vm')
 const test = require('ava')
 const { JSDOM, VirtualConsole } = require('jsdom')
 
-const MockXMLHttpRequest = require('mock-xmlhttprequest')
-const MockXhr = MockXMLHttpRequest.newMockXhr()
+const mockData = {
+  title: 'mock title',
+  thumbnail_url: 'mock thumbnail url',
+}
 
-MockXhr.onSend = (xhr) => {
-  const responseHeaders = { 'Content-Type': 'application/json' }
-  const response =
-    '{ "title": "mock title", "thumbnail_url": "mock thumbnail url" }'
-  xhr.respond(200, responseHeaders, response)
+const mockFetch = () => {
+  const mockResponse = {
+    json: () => Promise.resolve(mockResponse),
+    ...mockData,
+  }
+  return Promise.resolve(mockResponse)
 }
 
 const virtualConsole = new VirtualConsole()
@@ -32,7 +35,7 @@ test.beforeEach(() => {
 
   dom.runVMScript(script)
   global.document = dom.window.document
-  dom.window.XMLHttpRequest = MockXhr
+  dom.window.fetch = mockFetch
   global.window = dom.window
 })
 

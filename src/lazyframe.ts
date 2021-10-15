@@ -156,25 +156,17 @@ const Lazyframe = () => {
   }
 
   function fetchFromApi(lazyframe: LazyframeObject): Promise<LazyframeObject> {
-    return new Promise((resolve, reject) => {
-      const xhr = new XMLHttpRequest()
-      xhr.open('GET', `https://noembed.com/embed?url=${lazyframe.src}`)
-      xhr.onload = function () {
-        if (this.status === 200) {
-          const json = JSON.parse(xhr.response)
-          if (json.title) {
-            lazyframe.title = json.title
-          }
-          if (json.thumbnail_url) {
-            lazyframe.thumbnail = json.thumbnail_url
-          }
-          resolve(lazyframe)
-        } else {
-          reject()
+    return fetch(`https://noembed.com/embed?url=${lazyframe.src}`)
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.title) {
+          lazyframe.title = json.title
         }
-      }
-      xhr.send()
-    })
+        if (json.thumbnail_url) {
+          lazyframe.thumbnail = json.thumbnail_url
+        }
+        return lazyframe
+      })
   }
 
   function createPlaceholder(lazyframe: LazyframeObject) {

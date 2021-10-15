@@ -1,4 +1,5 @@
 # Lazyframe
+
 [![Node.js Package](https://github.com/vb/lazyframe/actions/workflows/npm-publish.yml/badge.svg)](https://github.com/vb/lazyframe/actions/workflows/npm-publish.yml)
 [![npm version](https://badge.fury.io/js/lazyframe.svg)](https://badge.fury.io/js/lazyframe)
 
@@ -40,19 +41,19 @@ $ bower install lazyframe
 JavaScript ES6 imports
 
 ```js
-import lazyframe from "lazyframe";
+import lazyframe from 'lazyframe'
 ```
 
-Include JavaScript in html
+Include JavaScript and css in html
 
 ```html
 <script src="dist/lazyframe.min.js"></script>
 ```
 
-Sass import
+CSS import
 
-```sass
-@import 'src/scss/lazyframe'
+```css
+@import 'src/lazyframe.css';
 ```
 
 Include css in html
@@ -65,15 +66,15 @@ Include css in html
 
 ```js
 // Passing a selector
-lazyframe(".lazyframe");
+lazyframe('.lazyframe')
 
 // Passing a nodelist
-let elements = document.querySelectorAll(".lazyframe");
-lazyframe(elements);
+let elements = document.querySelectorAll('.lazyframe')
+lazyframe(elements)
 
 // Passing a jQuery object
-let elements = $(".lazyframe");
-lazyframe(elements);
+let elements = $('.lazyframe')
+lazyframe(elements)
 ```
 
 ## Options
@@ -84,7 +85,7 @@ General options and corresponding defaults
 
 ```js
 lazyframe(elements, {
-  debounce: 250,
+  debounce: 100,
   lazyload: true,
   autoplay: true,
 
@@ -92,7 +93,7 @@ lazyframe(elements, {
   onLoad: (lazyframe) => console.log(lazyframe),
   onAppend: (iframe) => console.log(iframe),
   onThumbnailLoad: (img) => console.log(img),
-});
+})
 ```
 
 ### `debounce`
@@ -130,7 +131,6 @@ Callback function with the thumbnail URL
   data-src=""
   data-ratio="1:1"
   data-initinview="false"
-  data-autoplay="false"
 ></div>
 ```
 
