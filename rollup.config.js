@@ -13,7 +13,10 @@ export default [
       sourcemap: true,
     },
     plugins: [
-      typescript({ tsconfig: './tsconfig.json' }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        tslib: require.resolve('tslib'),
+      }),
       css({ output: 'lazyframe.css', minify: true }),
       terser(),
     ],
@@ -26,7 +29,10 @@ export default [
       exports: 'default',
     },
     plugins: [
-      typescript({ tsconfig: './tsconfig.json' }),
+      typescript({
+        tsconfig: './tsconfig.json',
+        tslib: require.resolve('tslib'),
+      }),
       css({ output: 'lazyframe.css', minify: true }),
     ],
   },
