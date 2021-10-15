@@ -193,6 +193,7 @@ const Lazyframe = () => {
     }
     if (lazyframe.thumbnail) {
       lazyframe.node.style.backgroundImage = `url(${lazyframe.thumbnail})`
+      settings.onThumbnailLoad.call(null, lazyframe.thumbnail)
     }
     onLoad(lazyframe)
   }

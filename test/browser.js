@@ -46,15 +46,21 @@ const createDomNode = (params = {}) => {
   return node
 }
 
-const lazyframe = (initializer = '.lazyframe', config = {}) => {
+const lazyframe = (initializer = '.lazyframe', config = {}, cb = 'onLoad') => {
   return new Promise((resolve) => {
     let i = 0
     const nodes = window.lazyframe(initializer, {
       ...config,
-      onLoad: () => {
-        i++
-        if (i === nodes.length) {
-          resolve()
+      lazyload: false,
+      onLoad: (e) => {
+        if (!nodes) {
+          resolve(e)
+        } else {
+          i++
+
+          if (i === nodes.length) {
+            resolve(e)
+          }
         }
       },
     })
@@ -67,7 +73,6 @@ test('should expose lazyframe()', async (t) => {
 
 test('should initialize one node with a string selector', async (t) => {
   createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
   await lazyframe()
@@ -76,11 +81,9 @@ test('should initialize one node with a string selector', async (t) => {
 
 test('should initialize mulitple nodes with a string selector', async (t) => {
   createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
   createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
 
@@ -90,7 +93,6 @@ test('should initialize mulitple nodes with a string selector', async (t) => {
 
 test('should initialize with a single node', async (t) => {
   const node = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
 
@@ -100,11 +102,9 @@ test('should initialize with a single node', async (t) => {
 
 test('should initialize with a nodelist', async (t) => {
   createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDB/?rel=0',
   })
   createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDC/?rel=0',
   })
 
@@ -115,7 +115,6 @@ test('should initialize with a nodelist', async (t) => {
 
 test('should append an iframe on click', async (t) => {
   const node = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
 
@@ -128,11 +127,9 @@ test('should append an iframe on click', async (t) => {
 test('should call onAppend callback function', async (t) => {
   let i = 0
   const node1 = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
   const node2 = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
   })
 
@@ -150,7 +147,6 @@ test('should call onAppend callback function', async (t) => {
 test('should use data-title', async (t) => {
   const title = 'custom title'
   const node = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?rel=0',
     title,
   })
@@ -164,7 +160,6 @@ test('should use data-title', async (t) => {
 test('should append optional query params from data-src', async (t) => {
   const query = 'rel=0&p=1'
   const node = createDomNode({
-    vendor: 'youtube',
     src: 'http://www.youtube.com/embed/iwGFalTRHDA/?' + query,
   })
 
