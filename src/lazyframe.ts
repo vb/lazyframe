@@ -4,7 +4,22 @@ interface LazyframeObject extends LazyframeSettings {
   node: HTMLElement
 }
 
-interface LazyframeSettings {
+interface LazyframeOptions {
+  debounce: number
+  lazyload: boolean
+  autoplay: boolean
+  youtubeThumbnailQuality: '' | 'sd' | 'mq' | 'hq' | 'maxres'
+  youtubeThumbnailImage: 'default' | '1' | '2' | '3'
+  onLoad: (node: HTMLElement) => void
+  onAppend: (node: HTMLElement | null) => void
+  onThumbnailLoad: (url: string) => void
+}
+
+type OverrideAbleSettings = Pick<
+  LazyframeOptions,
+  'youtubeThumbnailImage' | 'youtubeThumbnailQuality'
+>
+interface LazyframeSettings extends OverrideAbleSettings {
   src: string
   embed: string
   title: string | null
@@ -18,23 +33,27 @@ interface LazyframeSettings {
   iframeNode: DocumentFragment
 }
 
-interface LazyframeOptions {
-  debounce: number
-  lazyload: boolean
-  autoplay: boolean
-  onLoad: (node: HTMLElement) => void
-  onAppend: (node: HTMLElement | null) => void
-  onThumbnailLoad: (url: string) => void
-}
-
 const Lazyframe = () => {
   const findVendorIdAndQuery = new RegExp(
     /^(?:https?:\/\/)?(?:www\.)?(youtube-nocookie|youtube|vimeo)(?:\.com)?\/?.*(?:watch|embed)?(?:.*v=|v\/|\/)([\w-_]+)(?:\&|\?|\/\?)?(.+)?$/
   )
 
-  const classNames = {
-    loaded: 'lazyframe--loaded',
-    title: 'lazyframe__title',
+  const youtube = {
+    quality: {
+      values: ['', 'sd', 'mq', 'hq', 'maxres'],
+      default: 'hq' as LazyframeSettings['youtubeThumbnailQuality'],
+    },
+    image: {
+      values: ['default', '1', '2', '3'],
+      default: 'default' as LazyframeSettings['youtubeThumbnailImage'],
+    },
+    isYoutube: (vendor: LazyframeSettings['vendor']) =>
+      vendor && vendor.indexOf('youtube') > -1,
+  }
+
+  enum Classes {
+    LOADED = 'lazyframe--loaded',
+    TITLE = 'lazyframe__title',
   }
 
   const nodes: LazyframeObject[] = []
@@ -43,6 +62,8 @@ const Lazyframe = () => {
     debounce: 100,
     lazyload: true,
     autoplay: true,
+    youtubeThumbnailQuality: youtube.quality.default,
+    youtubeThumbnailImage: youtube.image.default,
     onLoad: () => {},
     onAppend: () => {},
     onThumbnailLoad: () => {},
@@ -75,7 +96,7 @@ const Lazyframe = () => {
   }
 
   function create(node: HTMLElement) {
-    if (node.classList.contains(classNames.loaded)) {
+    if (node.classList.contains(Classes.LOADED)) {
       return
     }
 
@@ -106,7 +127,7 @@ const Lazyframe = () => {
     const fragment = document.createDocumentFragment()
     const titleNode = document.createElement('span')
 
-    titleNode.className = classNames.title
+    titleNode.className = Classes.TITLE
     fragment.appendChild(titleNode)
 
     if (lazyframe.title) {
@@ -121,6 +142,8 @@ const Lazyframe = () => {
     const title = node.getAttribute('data-title')
     const thumbnail = node.getAttribute('data-thumbnail')
     const initinview = node.getAttribute('data-initinview') === 'true'
+
+    const youtube = getYoutubeSettings(node)
 
     if (!src) {
       throw new Error('You must supply a data-src on the node')
@@ -152,6 +175,23 @@ const Lazyframe = () => {
       query,
       initialized: false,
       iframeNode: createIframeNode(vendor, query, src, id),
+      youtubeThumbnailQuality: youtube.quality,
+      youtubeThumbnailImage: youtube.image,
+    }
+  }
+
+  function getYoutubeSettings(node: HTMLElement) {
+    let quality = node.getAttribute('data-youtube-thumbnail-quality')
+    if (!quality || !youtube.quality.values.includes(quality)) {
+      quality = settings.youtubeThumbnailQuality
+    }
+    let image = node.getAttribute('data-youtube-thumbnail-image')
+    if (!image || !youtube.image.values.includes(image)) {
+      image = settings.youtubeThumbnailImage
+    }
+    return {
+      image: image as LazyframeSettings['youtubeThumbnailImage'],
+      quality: quality as LazyframeSettings['youtubeThumbnailQuality'],
     }
   }
 
@@ -163,7 +203,21 @@ const Lazyframe = () => {
           lazyframe.title = json.title
         }
         if (json.thumbnail_url) {
-          lazyframe.thumbnail = json.thumbnail_url
+          if (youtube.isYoutube(lazyframe.vendor)) {
+            if (
+              lazyframe.youtubeThumbnailImage === youtube.image.default &&
+              lazyframe.youtubeThumbnailQuality === youtube.quality.default
+            ) {
+              lazyframe.thumbnail = json.thumbnail_url
+            }
+            lazyframe.thumbnail = json.thumbnail_url.replace(
+              new RegExp(youtube.quality.default + youtube.image.default),
+              lazyframe.youtubeThumbnailQuality +
+                lazyframe.youtubeThumbnailImage
+            )
+          } else {
+            lazyframe.thumbnail = json.thumbnail_url
+          }
         }
         return lazyframe
       })
@@ -178,7 +232,7 @@ const Lazyframe = () => {
   }
 
   function populatePlaceholder(lazyframe: LazyframeObject) {
-    const titleNode = lazyframe.node.querySelector('.lazyframe__title')
+    const titleNode = lazyframe.node.querySelector(`.${Classes.TITLE}`)
 
     if (lazyframe.title && titleNode && titleNode.innerHTML === '') {
       titleNode.innerHTML = lazyframe.title
@@ -191,7 +245,7 @@ const Lazyframe = () => {
   }
 
   function onLoad(lazyframe: LazyframeObject) {
-    lazyframe.node.classList.add(classNames.loaded)
+    lazyframe.node.classList.add(Classes.LOADED)
     lazyframe.initialized = true
     if (lazyframe.initinview) {
       lazyframe.node.click()
@@ -242,7 +296,7 @@ const Lazyframe = () => {
   }
 
   function createIframeNode(
-    vendor: LazyframeObject['vendor'] | '' = '',
+    vendor: LazyframeSettings['vendor'],
     query: string,
     src: string,
     id: string
@@ -251,7 +305,7 @@ const Lazyframe = () => {
     const iframeNode = document.createElement('iframe')
 
     let embed = src
-    if (vendor && vendor.indexOf('youtube') > -1) {
+    if (youtube.isYoutube(vendor)) {
       embed = `https://www.${vendor}.com/embed/${id}/?${query}`
     } else if (vendor === 'vimeo') {
       embed = `https://player.vimeo.com/video/${id}/?${query}`

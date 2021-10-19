@@ -88,7 +88,8 @@ lazyframe(elements, {
   debounce: 100,
   lazyload: true,
   autoplay: true,
-
+  youtubeThumbnailQuality: 'hq',
+  youtubeThumbnailImage: 'default',
   // Callbacks
   onLoad: (lazyframe) => console.log(lazyframe),
   onAppend: (iframe) => console.log(iframe),
@@ -107,6 +108,14 @@ Set this to `false` if you want all API calls and local images to be loaded on p
 ### `autoplay`
 
 Set this to `false` to remove autoplay from the `allow` attribute on the iframe tag i.e if set this to `false` if you want don't want your Youtube video to automatically start playing once the user clicks on the play icon.
+
+### youtubeThumbnailQuality
+
+Defines the thumbnail quality to use from Youtubes thumbnail service. Possible values are '', 'sd', 'mq', 'hq' and 'maxres'
+
+### youtubeThumbnailImage
+
+Defines the thumbnail image to use from Youtubes thumbnail service. Possible values are 'default', '1', '2' and '3'
 
 ### `onLoad`
 
@@ -131,6 +140,8 @@ Callback function with the thumbnail URL
   data-src=""
   data-ratio="1:1"
   data-initinview="false"
+  data-youtube-thumbnail-image="default"
+  data-youtube-thumbnail-quality="hq"
 ></div>
 ```
 
@@ -157,6 +168,14 @@ The ratio of the lazyframe. Possible values: 16:9, 4:3, 1:1
 ### `data-initinview`
 
 Set this to true if you want the resource to execute (for example video to play) when the element is in view.
+
+### data-youtube-thumbnail-image
+
+Defines the thumbnail image to use from Youtubes thumbnail service. Possible values are 'default', '1', '2' and '3'.
+
+### data-youtube-thumbnail-quality
+
+Defines the thumbnail quality to use from Youtubes thumbnail service. Possible values are '', 'sd', 'mq', 'hq' and 'maxres'
 
 ## License
 

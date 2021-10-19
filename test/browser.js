@@ -171,7 +171,7 @@ test('should append optional query params from data-src', async (t) => {
   node.click()
   const iframe = node.querySelector('iframe')
   const src = iframe.getAttribute('src')
-  const [, iframQuery] = src.split('?autoplay=1&')
+  const [, iframeQuery] = src.split('?autoplay=1&')
 
-  t.is(iframQuery, query)
+  t.is(iframeQuery, query)
 })
