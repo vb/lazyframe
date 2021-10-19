@@ -1,25 +1,39 @@
-import { babel } from "@rollup/plugin-babel";
-import { terser } from "rollup-plugin-terser";
-import scss from "rollup-plugin-scss";
+import { terser } from 'rollup-plugin-terser'
+import typescript from '@rollup/plugin-typescript'
+import css from 'rollup-plugin-import-css'
 
-export default {
-  input: "src/lazyframe.js",
-  output: {
-    file: "dist/lazyframe.min.js",
-    format: "umd",
-    exports: "default",
-    name: "lazyframe",
-    sourcemap: true,
+export default [
+  {
+    input: 'src/lazyframe.ts',
+    output: {
+      file: 'dist/lazyframe.min.js',
+      format: 'umd',
+      exports: 'default',
+      name: 'lazyframe',
+      sourcemap: true,
+    },
+    plugins: [
+      typescript({
+        tsconfig: './tsconfig.json',
+        tslib: require.resolve('tslib'),
+      }),
+      css({ output: 'lazyframe.css', minify: true }),
+      terser(),
+    ],
   },
-  plugins: [
-    babel({
-      exclude: "node_modules/**",
-      babelHelpers: "bundled",
-    }),
-    terser(),
-    scss({
-      output: "dist/lazyframe.css",
-      outputStyle: "compressed",
-    }),
-  ],
-};
+  {
+    input: 'src/lazyframe.ts',
+    output: {
+      file: 'dist/lazyframe.module.js',
+      format: 'cjs',
+      exports: 'default',
+    },
+    plugins: [
+      typescript({
+        tsconfig: './tsconfig.json',
+        tslib: require.resolve('tslib'),
+      }),
+      css({ output: 'lazyframe.css', minify: true }),
+    ],
+  },
+]

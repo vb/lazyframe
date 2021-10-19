@@ -1,9 +1,9 @@
-const path = require('path');
+const path = require('path')
 
-const test = require('ava');
+const test = require('ava')
 
-const lazyframe = require('..');
+const lazyframe = require('../dist/lazyframe.module')
 
 test('should expose lazyframe()', (t) => {
-  t.true(typeof lazyframe === 'function');
-});
+  t.true(typeof lazyframe === 'function')
+})
