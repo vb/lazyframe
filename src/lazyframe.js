@@ -104,13 +104,35 @@ const Lazyframe = () => {
 
   }
 
+  function parseBoolValue(inputString, defaultVal) {
+    if (inputString === 'true') {
+      return true;
+    }
+    if (inputString === 'false') {
+      return false;
+    }
+    return defaultVal;
+  }
+
+  function parseIntValue(inputString, defaultVal) {
+    const val = parseInt(inputString);
+    return isNaN(val) ? defaultVal: val;
+  }
+
   function setup(el) {
 
     const attr = Array.prototype.slice.apply(el.attributes)
      .filter(att => att.value !== '')
      .reduce((obj, curr) => {
         let name = curr.name.indexOf('data-') === 0 ? curr.name.split('data-')[1] : curr.name;
-        obj[name] = curr.value;
+        let val = curr.value;
+        if (['autoplay','initinview'].includes(name)) {
+          val = parseBoolValue(val, settings[name])
+        }
+        if (['debounce'].includes(name)) {
+          val = parseIntValue(val, settings[name])
+        }
+        obj[name] = val;
         return obj;
      }, {});
 
